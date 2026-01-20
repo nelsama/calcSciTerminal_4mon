@@ -1,0 +1,809 @@
+Modules list:
+-------------
+startup.o:
+    ZEROPAGE          Offs=000000  Size=000006  Align=00001  Fill=0000
+    STARTUP           Offs=000000  Size=000047  Align=00001  Fill=0000
+msbasic_wrapper.o:
+    CODE              Offs=000000  Size=00034D  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=00000B  Align=00001  Fill=0000
+msbasic_float_only.o:
+    CODE              Offs=00034D  Size=00082A  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000006  Size=000078  Align=00001  Fill=0000
+main.o:
+    CODE              Offs=000B77  Size=00097B  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000232  Align=00001  Fill=0000
+    BSS               Offs=00000B  Size=00001C  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000008  Align=00001  Fill=0000
+float_convert.o:
+    CODE              Offs=0014F2  Size=00079F  Align=00001  Fill=0000
+    RODATA            Offs=000232  Size=000041  Align=00001  Fill=0000
+tm1638.o:
+    CODE              Offs=001C91  Size=000CE9  Align=00001  Fill=0000
+    RODATA            Offs=000273  Size=00009A  Align=00001  Fill=0000
+    BSS               Offs=000027  Size=000001  Align=00001  Fill=0000
+    DATA              Offs=000008  Size=000001  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(add.o):
+    CODE              Offs=00297A  Size=00001C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(addysp.o):
+    CODE              Offs=002996  Size=00000E  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(along.o):
+    CODE              Offs=0029A4  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(asleax1.o):
+    CODE              Offs=0029B1  Size=00000C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(axlong.o):
+    CODE              Offs=0029BD  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decax1.o):
+    CODE              Offs=0029CA  Size=000007  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decaxy.o):
+    CODE              Offs=0029D1  Size=000009  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp1.o):
+    CODE              Offs=0029DA  Size=000009  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp2.o):
+    CODE              Offs=0029E3  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp3.o):
+    CODE              Offs=0029F0  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp4.o):
+    CODE              Offs=0029FD  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp5.o):
+    CODE              Offs=002A0A  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(decsp6.o):
+    CODE              Offs=002A17  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(icmp.o):
+    CODE              Offs=002A24  Size=00002E  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incax1.o):
+    CODE              Offs=002A52  Size=000007  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incaxy.o):
+    CODE              Offs=002A59  Size=00000B  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp1.o):
+    CODE              Offs=002A64  Size=000007  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp2.o):
+    CODE              Offs=002A6B  Size=000016  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp4.o):
+    CODE              Offs=002A81  Size=000005  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp5.o):
+    CODE              Offs=002A86  Size=000005  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp6.o):
+    CODE              Offs=002A8B  Size=000005  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(incsp8.o):
+    CODE              Offs=002A90  Size=000005  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(jmpvec.o):
+    DATA              Offs=000009  Size=000003  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(land.o):
+    CODE              Offs=002A95  Size=000024  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lcmp.o):
+    CODE              Offs=002AB9  Size=00003B  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(ldaxsp.o):
+    CODE              Offs=002AF4  Size=000009  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(ldeaxysp.o):
+    CODE              Offs=002AFD  Size=000013  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(ldiv.o):
+    CODE              Offs=002B10  Size=00001C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(leaaxsp.o):
+    CODE              Offs=002B2C  Size=00000C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(leq.o):
+    CODE              Offs=002B38  Size=000006  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lge.o):
+    CODE              Offs=002B3E  Size=000006  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(linc.o):
+    CODE              Offs=002B44  Size=000011  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(llt.o):
+    CODE              Offs=002B55  Size=000006  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lmod.o):
+    CODE              Offs=002B5B  Size=000020  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lne.o):
+    CODE              Offs=002B7B  Size=000006  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lneg.o):
+    CODE              Offs=002B81  Size=00001E  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lor.o):
+    CODE              Offs=002B9F  Size=000024  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lpop.o):
+    CODE              Offs=002BC3  Size=000015  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lpush.o):
+    CODE              Offs=002BD8  Size=000021  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lshelp.o):
+    CODE              Offs=002BF9  Size=000052  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lshl.o):
+    CODE              Offs=002C4B  Size=00001A  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lshr.o):
+    CODE              Offs=002C65  Size=00001A  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(ltest.o):
+    CODE              Offs=002C7F  Size=00000F  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(ludiv.o):
+    CODE              Offs=002C8E  Size=00007A  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(lumod.o):
+    CODE              Offs=002D08  Size=000019  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(makebool.o):
+    CODE              Offs=002D21  Size=00002C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(memcpy.o):
+    CODE              Offs=002D4D  Size=00003C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(mulax10.o):
+    CODE              Offs=002D89  Size=000019  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(mulax5.o):
+    CODE              Offs=002DA2  Size=000014  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(popptr1.o):
+    CODE              Offs=002DB6  Size=00000E  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(pusha.o):
+    CODE              Offs=002DC4  Size=000016  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(pushax.o):
+    CODE              Offs=002DDA  Size=00001A  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(pushwsp.o):
+    CODE              Offs=002DF4  Size=00001C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(shl.o):
+    CODE              Offs=002E10  Size=000033  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(shreax1.o):
+    CODE              Offs=002E43  Size=00000C  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(staspidx.o):
+    CODE              Offs=002E4F  Size=000016  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(staxsp.o):
+    CODE              Offs=002E65  Size=00000B  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(steaxsp.o):
+    CODE              Offs=002E70  Size=000015  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(sub.o):
+    CODE              Offs=002E85  Size=000015  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(subysp.o):
+    CODE              Offs=002E9A  Size=00000D  Align=00001  Fill=0000
+D:\cc65\lib\none.lib(zeropage.o):
+    ZEROPAGE          Offs=00007E  Size=00001A  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+ZEROPAGE              000020  0000B7  000098  00001
+STARTUP               000800  000846  000047  00001
+CODE                  000847  0036ED  002EA7  00001
+RODATA                0036EE  0039FA  00030D  00001
+DATA                  0039FB  003A06  00000C  00001
+BSS                   003A07  003A2E  000028  00001
+
+
+Exports list by name:
+---------------------
+ARG                       0000D3 RLZ    ARGEXTENSION              0000C0 RLZ    
+ARGSIGN                   0000D8 RLZ    FAC                       0000CB RLZ    
+FACEXTENSION              0000DA REZ    FACSIGN                   0000D0 RLZ    
+FADD                      000BD6 RLA    FDIV                      000E7E RLA    
+FMULT                     000D97 RLA    FSUB                      000BBF RLA    
+QINT                      00100A RLA    STORE_FAC_AT_YX_ROUNDED   000F43 RLA    
+_ARG                      0000D3 REZ    _FAC                      0000CB REZ    
+__BSS_RUN__               003A07 RLA    __BSS_SIZE__              000028 REA    
+__STARTUP__               000001 REA    _fp_add                   0008D8 RLA    
+_fp_clear_fac             000B7B RLA    _fp_div                   000A28 RLA    
+_fp_float_to_string       001EFF RLA    _fp_mul                   0009B8 RLA    
+_fp_save_fac              000B5A RLA    _fp_string_to_float       001D39 RLA    
+_fp_sub                   000948 RLA    _main                     001BB4 RLA    
+_memcpy                   003594 RLA    _tm1638_get_key_pressed   002BAB RLA    
+_tm1638_init              0024FE RLA    _tm1638_set_brightness    002AEA RLA    
+_tm1638_show_text         0028B5 RLA    addysp                    0031DE RLA    
+addysp1                   0031DD RLA    aslaxy                    00365E RLA    
+aulong                    0031F1 RLA    axulong                   00320A RLA    
+booleq                    00356E RLA    boolge                    00357F RLA    
+boollt                    003577 RLA    boolne                    003568 RLA    
+decax1                    003211 RLA    decaxy                    003218 RLA    
+decsp1                    003221 RLA    decsp2                    00322A RLA    
+decsp3                    003237 RLA    decsp4                    003244 RLA    
+decsp5                    003251 RLA    decsp6                    00325E RLA    
+getlop                    0034E6 RLA    incax1                    003299 RLA    
+incaxy                    0032A2 RLA    inceaxy                   00338B RLA    
+incsp1                    0032AB RLA    incsp2                    0032BA RLA    
+incsp4                    0032C8 RLA    incsp5                    0032CD RLA    
+incsp6                    0032D2 RLA    incsp8                    0032D7 RLA    
+jmpvec                    003A04 RLA    ldax0sp                   00333B RLA    
+ldaxysp                   00333D RLA    ldeax0sp                  003344 RLA    
+ldeaxysp                  003346 RLA    leaa0sp                   003373 RLA    
+mulax10                   0035D0 RLA    mulax5                    0035E9 RLA    
+negeax                    0033C8 RLA    popax                     0032B2 RLA    
+popeax                    00340A RLA    poplsargs                 003440 RLA    
+popptr1                   0035FD RLA    ptr1                      0000A6 RLZ    
+ptr2                      0000A8 RLZ    ptr3                      0000AA RLZ    
+ptr4                      0000AC RLZ    push0                     003621 RLA    
+pusha                     00360F RLA    pusha0                    003623 RLA    
+pushax                    003625 RLA    pusheax                   003428 RLA    
+pushl0                    00341F RLA    pushw0sp                  00363B RLA    
+pushwysp                  00363D RLA    regsave                   0000A2 RLZ    
+shleax1                   0031F8 RLA    shreax1                   00368A RLA    
+sp                        00009E RLZ    sreg                      0000A0 RLZ    
+staspidx                  003696 RLA    stax0sp                   0036AC RLA    
+staxysp                   0036AE RLA    steax0sp                  0036B7 RLA    
+steaxysp                  0036B9 RLA    subysp                    0036E1 RLA    
+tmp1                      0000AE RLZ    tmp2                      0000AF RLZ    
+tmp3                      0000B0 RLZ    tmp4                      0000B1 RLZ    
+tosadda0                  0031C1 RLA    tosand0ax                 0032DC RLA    
+tosandeax                 0032E2 RLA    tosdiv0ax                 003357 RLA    
+toseqeax                  00337F RLA    tosgeeax                  003385 RLA    
+tosicmp0                  00326B RLA    toslcmp                   003300 RLA    
+toslteax                  00339C RLA    tosmod0ax                 0033A2 RLA    
+tosneeax                  0033C2 RLA    tosoreax                  0033EC RLA    
+tosshleax                 003492 RLA    tosshreax                 0034AC RLA    
+tossuba0                  0036CC RLA    tosudiv0ax                0034D5 RLA    
+tosumod0ax                00354F RLA    udiv32                    00350A RLA    
+utsteax                   0034C6 RLA    
+
+
+Exports list by value:
+----------------------
+__STARTUP__               000001 REA    __BSS_SIZE__              000028 REA    
+sp                        00009E RLZ    sreg                      0000A0 RLZ    
+regsave                   0000A2 RLZ    ptr1                      0000A6 RLZ    
+ptr2                      0000A8 RLZ    ptr3                      0000AA RLZ    
+ptr4                      0000AC RLZ    tmp1                      0000AE RLZ    
+tmp2                      0000AF RLZ    tmp3                      0000B0 RLZ    
+tmp4                      0000B1 RLZ    ARGEXTENSION              0000C0 RLZ    
+FAC                       0000CB RLZ    _FAC                      0000CB REZ    
+FACSIGN                   0000D0 RLZ    ARG                       0000D3 RLZ    
+_ARG                      0000D3 REZ    ARGSIGN                   0000D8 RLZ    
+FACEXTENSION              0000DA REZ    _fp_add                   0008D8 RLA    
+_fp_sub                   000948 RLA    _fp_mul                   0009B8 RLA    
+_fp_div                   000A28 RLA    _fp_save_fac              000B5A RLA    
+_fp_clear_fac             000B7B RLA    FSUB                      000BBF RLA    
+FADD                      000BD6 RLA    FMULT                     000D97 RLA    
+FDIV                      000E7E RLA    STORE_FAC_AT_YX_ROUNDED   000F43 RLA    
+QINT                      00100A RLA    _main                     001BB4 RLA    
+_fp_string_to_float       001D39 RLA    _fp_float_to_string       001EFF RLA    
+_tm1638_init              0024FE RLA    _tm1638_show_text         0028B5 RLA    
+_tm1638_set_brightness    002AEA RLA    _tm1638_get_key_pressed   002BAB RLA    
+tosadda0                  0031C1 RLA    addysp1                   0031DD RLA    
+addysp                    0031DE RLA    aulong                    0031F1 RLA    
+shleax1                   0031F8 RLA    axulong                   00320A RLA    
+decax1                    003211 RLA    decaxy                    003218 RLA    
+decsp1                    003221 RLA    decsp2                    00322A RLA    
+decsp3                    003237 RLA    decsp4                    003244 RLA    
+decsp5                    003251 RLA    decsp6                    00325E RLA    
+tosicmp0                  00326B RLA    incax1                    003299 RLA    
+incaxy                    0032A2 RLA    incsp1                    0032AB RLA    
+popax                     0032B2 RLA    incsp2                    0032BA RLA    
+incsp4                    0032C8 RLA    incsp5                    0032CD RLA    
+incsp6                    0032D2 RLA    incsp8                    0032D7 RLA    
+tosand0ax                 0032DC RLA    tosandeax                 0032E2 RLA    
+toslcmp                   003300 RLA    ldax0sp                   00333B RLA    
+ldaxysp                   00333D RLA    ldeax0sp                  003344 RLA    
+ldeaxysp                  003346 RLA    tosdiv0ax                 003357 RLA    
+leaa0sp                   003373 RLA    toseqeax                  00337F RLA    
+tosgeeax                  003385 RLA    inceaxy                   00338B RLA    
+toslteax                  00339C RLA    tosmod0ax                 0033A2 RLA    
+tosneeax                  0033C2 RLA    negeax                    0033C8 RLA    
+tosoreax                  0033EC RLA    popeax                    00340A RLA    
+pushl0                    00341F RLA    pusheax                   003428 RLA    
+poplsargs                 003440 RLA    tosshleax                 003492 RLA    
+tosshreax                 0034AC RLA    utsteax                   0034C6 RLA    
+tosudiv0ax                0034D5 RLA    getlop                    0034E6 RLA    
+udiv32                    00350A RLA    tosumod0ax                00354F RLA    
+boolne                    003568 RLA    booleq                    00356E RLA    
+boollt                    003577 RLA    boolge                    00357F RLA    
+_memcpy                   003594 RLA    mulax10                   0035D0 RLA    
+mulax5                    0035E9 RLA    popptr1                   0035FD RLA    
+pusha                     00360F RLA    push0                     003621 RLA    
+pusha0                    003623 RLA    pushax                    003625 RLA    
+pushw0sp                  00363B RLA    pushwysp                  00363D RLA    
+aslaxy                    00365E RLA    shreax1                   00368A RLA    
+staspidx                  003696 RLA    stax0sp                   0036AC RLA    
+staxysp                   0036AE RLA    steax0sp                  0036B7 RLA    
+steaxysp                  0036B9 RLA    tossuba0                  0036CC RLA    
+subysp                    0036E1 RLA    jmpvec                    003A04 RLA    
+__BSS_RUN__               003A07 RLA    
+
+
+Imports list:
+-------------
+ARG (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(39)
+ARGEXTENSION (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(40)
+ARGSIGN (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(39)
+FAC (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(39)
+FACEXTENSION (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(40)
+FACSIGN (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(39)
+FADD (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(36)
+FDIV (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(36)
+FMULT (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(36)
+FSUB (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(36)
+QINT (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(37)
+STORE_FAC_AT_YX_ROUNDED (msbasic_float_only.o):
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(38)
+_ARG (msbasic_wrapper.o):
+    main.o                    src\main.s(670)
+_FAC (msbasic_wrapper.o):
+    main.o                    src\main.s(637)
+__BSS_RUN__ ([linker generated]):
+    startup.o                 src\startup.s(12)
+__BSS_SIZE__ ([linker generated]):
+    startup.o                 src\startup.s(12)
+__STARTUP__ (startup.o):
+    main.o                    src\main.s(13)
+_fp_add (msbasic_wrapper.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(13)
+    main.o                    src\main.s(14)
+_fp_clear_fac (msbasic_wrapper.o):
+    main.o                    src\main.s(21)
+_fp_div (msbasic_wrapper.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(16)
+    main.o                    src\main.s(17)
+_fp_float_to_string (float_convert.o):
+    main.o                    src\main.s(19)
+_fp_mul (msbasic_wrapper.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(15)
+    main.o                    src\main.s(16)
+_fp_save_fac (msbasic_wrapper.o):
+    main.o                    src\main.s(20)
+_fp_string_to_float (float_convert.o):
+    main.o                    src\main.s(18)
+_fp_sub (msbasic_wrapper.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(14)
+    main.o                    src\main.s(15)
+_main (main.o):
+    startup.o                 src\startup.s(11)
+_memcpy (memcpy.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+_tm1638_get_key_pressed (tm1638.o):
+    main.o                    src\main.s(25)
+_tm1638_init (tm1638.o):
+    main.o                    src\main.s(22)
+_tm1638_set_brightness (tm1638.o):
+    main.o                    src\main.s(24)
+_tm1638_show_text (tm1638.o):
+    main.o                    src\main.s(23)
+addysp (addysp.o):
+    incsp8.o                  runtime/incsp8.s(8)
+    incsp6.o                  runtime/incsp6.s(8)
+    incsp5.o                  runtime/incsp5.s(8)
+    incsp4.o                  runtime/incsp4.s(8)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+addysp1 (addysp.o):
+    sub.o                     runtime/sub.s(8)
+    ludiv.o                   runtime/ludiv.s(9)
+    lor.o                     runtime/lor.s(9)
+    land.o                    runtime/land.s(9)
+aslaxy (shl.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+aulong (along.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+axulong (axlong.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+booleq (makebool.o):
+    leq.o                     runtime/leq.s(8)
+    main.o                    src\main.s(1496)
+boolge (makebool.o):
+    lge.o                     runtime/lge.s(8)
+boollt (makebool.o):
+    llt.o                     runtime/llt.s(8)
+boolne (makebool.o):
+    lne.o                     runtime/lne.s(8)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+decax1 (decax1.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+decaxy (decaxy.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+decsp1 (decsp1.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+decsp2 (decsp2.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+decsp3 (decsp3.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+decsp4 (decsp4.o):
+    lpush.o                   runtime/lpush.s(12)
+decsp5 (decsp5.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+decsp6 (decsp6.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+getlop (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+    lshelp.o                  runtime/lshelp.s(11)
+incax1 (incax1.o):
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+incaxy (incaxy.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+inceaxy (linc.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+incsp1 (incsp1.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+incsp2 (incsp2.o):
+    staspidx.o                runtime/staspidx.s(8)
+    popptr1.o                 runtime/popptr1.s(8)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+incsp4 (incsp4.o):
+    lpop.o                    runtime/lpop.s(9)
+    lcmp.o                    runtime/lcmp.s(9)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+incsp5 (incsp5.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+incsp6 (incsp6.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+incsp8 (incsp8.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+jmpvec (jmpvec.o):
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+ldax0sp (ldaxsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+ldaxysp (ldaxsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+ldeax0sp (ldeaxysp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+ldeaxysp (ldeaxysp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+leaa0sp (leaaxsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+mulax10 (mulax10.o):
+    main.o                    src\main.s(1496)
+mulax5 (mulax5.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+negeax (lneg.o):
+    lmod.o                    runtime/lmod.s(11)
+    ldiv.o                    runtime/ldiv.s(11)
+popax (incsp2.o):
+    shl.o                     runtime/shl.s(15)
+    memcpy.o                  common/memcpy.s(14)
+    msbasic_wrapper.o         libs/msbasic-float\src\msbasic_wrapper.s(14)
+popeax (lpop.o):
+    lshr.o                    runtime/lshr.s(15)
+    lshl.o                    runtime/lshl.s(15)
+poplsargs (lshelp.o):
+    lmod.o                    runtime/lmod.s(11)
+    ldiv.o                    runtime/ldiv.s(11)
+popptr1 (popptr1.o):
+    memcpy.o                  common/memcpy.s(14)
+ptr1 (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    staspidx.o                runtime/staspidx.s(9)
+    popptr1.o                 runtime/popptr1.s(9)
+    mulax5.o                  runtime/mulax5.s(9)
+    mulax10.o                 runtime/mulax10.s(9)
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lshelp.o                  runtime/lshelp.s(12)
+    ldiv.o                    runtime/ldiv.s(12)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(11)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(11)
+    main.o                    src\main.s(11)
+ptr2 (zeropage.o):
+    memcpy.o                  common/memcpy.s(15)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmod.o                    runtime/lmod.s(12)
+ptr3 (zeropage.o):
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lshelp.o                  runtime/lshelp.s(12)
+ptr4 (zeropage.o):
+    ludiv.o                   runtime/ludiv.s(10)
+    lshelp.o                  runtime/lshelp.s(12)
+    linc.o                    runtime/linc.s(8)
+push0 (pushax.o):
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+pusha (pusha.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+pusha0 (pushax.o):
+    main.o                    src\main.s(1496)
+pushax (pushax.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+pusheax (lpush.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+pushl0 (lpush.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+pushw0sp (pushwsp.o):
+    main.o                    src\main.s(1496)
+pushwysp (pushwsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+regsave (zeropage.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(10)
+    main.o                    src\main.s(10)
+shleax1 (asleax1.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+shreax1 (shreax1.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+sp (zeropage.o):
+    lpop.o                    runtime/lpop.s(10)
+    lcmp.o                    runtime/lcmp.s(10)
+    decsp4.o                  runtime/decsp4.s(8)
+    subysp.o                  runtime/subysp.s(9)
+    sub.o                     runtime/sub.s(9)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    staxsp.o                  runtime/staxsp.s(8)
+    staspidx.o                runtime/staspidx.s(9)
+    pushwsp.o                 runtime/pushwsp.s(8)
+    pushax.o                  runtime/pushax.s(8)
+    pusha.o                   runtime/pusha.s(8)
+    popptr1.o                 runtime/popptr1.s(9)
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lpush.o                   runtime/lpush.s(13)
+    lor.o                     runtime/lor.s(10)
+    leaaxsp.o                 runtime/leaaxsp.s(8)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    ldaxsp.o                  runtime/ldaxsp.s(8)
+    land.o                    runtime/land.s(10)
+    incsp2.o                  runtime/incsp2.s(8)
+    incsp1.o                  runtime/incsp1.s(8)
+    icmp.o                    runtime/icmp.s(9)
+    decsp6.o                  runtime/decsp6.s(8)
+    decsp5.o                  runtime/decsp5.s(8)
+    decsp3.o                  runtime/decsp3.s(8)
+    decsp2.o                  runtime/decsp2.s(8)
+    decsp1.o                  runtime/decsp1.s(8)
+    addysp.o                  runtime/addysp.s(8)
+    add.o                     runtime/add.s(12)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(10)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(10)
+    main.o                    src\main.s(10)
+    startup.o                 src\startup.s(13)
+sreg (zeropage.o):
+    lpop.o                    runtime/lpop.s(10)
+    lcmp.o                    runtime/lcmp.s(10)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    shreax1.o                 runtime/shreax1.s(8)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    ltest.o                   runtime/ltest.s(8)
+    lshr.o                    runtime/lshr.s(16)
+    lshl.o                    runtime/lshl.s(16)
+    lshelp.o                  runtime/lshelp.s(12)
+    lpush.o                   runtime/lpush.s(13)
+    lor.o                     runtime/lor.s(10)
+    lneg.o                    runtime/lneg.s(11)
+    lmod.o                    runtime/lmod.s(12)
+    linc.o                    runtime/linc.s(8)
+    ldiv.o                    runtime/ldiv.s(12)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    land.o                    runtime/land.s(10)
+    icmp.o                    runtime/icmp.s(9)
+    axlong.o                  runtime/axlong.s(9)
+    asleax1.o                 runtime/asleax1.s(8)
+    along.o                   runtime/along.s(9)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(10)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(10)
+    main.o                    src\main.s(10)
+staspidx (staspidx.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+stax0sp (staxsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    main.o                    src\main.s(1496)
+staxysp (staxsp.o):
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+steax0sp (steaxsp.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+steaxysp (steaxsp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+subysp (subysp.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+    main.o                    src\main.s(1496)
+    main.o                    src\main.s(1496)
+tmp1 (zeropage.o):
+    staspidx.o                runtime/staspidx.s(9)
+    shreax1.o                 runtime/shreax1.s(8)
+    shl.o                     runtime/shl.s(16)
+    ltest.o                   runtime/ltest.s(8)
+    lshr.o                    runtime/lshr.s(16)
+    lshl.o                    runtime/lshl.s(16)
+    lshelp.o                  runtime/lshelp.s(12)
+    lor.o                     runtime/lor.s(10)
+    lmod.o                    runtime/lmod.s(12)
+    ldiv.o                    runtime/ldiv.s(12)
+    land.o                    runtime/land.s(10)
+    incaxy.o                  runtime/incaxy.s(8)
+    decaxy.o                  runtime/decaxy.s(8)
+    asleax1.o                 runtime/asleax1.s(8)
+    add.o                     runtime/add.s(12)
+tmp2 (zeropage.o):
+    lshelp.o                  runtime/lshelp.s(12)
+    ldiv.o                    runtime/ldiv.s(12)
+tmp3 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmod.o                    runtime/lmod.s(12)
+tmp4 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmod.o                    runtime/lmod.s(12)
+tosadda0 (add.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosand0ax (land.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+tosandeax (land.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+tosdiv0ax (ldiv.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+toseqeax (leq.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosgeeax (lge.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosicmp0 (icmp.o):
+    main.o                    src\main.s(1496)
+toslcmp (lcmp.o):
+    lne.o                     runtime/lne.s(8)
+    llt.o                     runtime/llt.s(8)
+    lge.o                     runtime/lge.s(8)
+    leq.o                     runtime/leq.s(8)
+toslteax (llt.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosmod0ax (lmod.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosneeax (lne.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+tosoreax (lor.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosshleax (lshl.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+tosshreax (lshr.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tossuba0 (sub.o):
+    float_convert.o           libs/msbasic-float\src\float_convert.s(1025)
+tosudiv0ax (ludiv.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+tosumod0ax (lumod.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+udiv32 (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+    lmod.o                    runtime/lmod.s(11)
+    ldiv.o                    runtime/ldiv.s(11)
+utsteax (ltest.o):
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+    tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
+
