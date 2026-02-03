@@ -2,6 +2,23 @@
 
 Calculadora de punto flotante completa usando el módulo **TM1638** (display de 8 dígitos + 16 botones) con el Monitor 6502 en la Tang Nano 9K.
 
+## Módulo TM1638
+
+![TM1638 Display Module](docs/images/tm1638.jpg)
+
+### Acerca del TM1638
+
+El **TM1638** es un controlador LED/teclado integrado muy utilizado en proyectos con microcontroladores. Este proyecto utiliza el módulo **QYF-TM1638**, que proporciona:
+
+- **Display LED de 8 dígitos**: Segmentos de 7 puntos para mostrar números y algunos caracteres
+- **16 botones tactiles**: Organizados en una matriz de 4×4 para entrada de datos
+- **LEDs de estado**: Que pueden indicar información adicional
+- **Interfaz serial simple**: Comunicación mediante 3 líneas (STB/CLK/DIO)
+- **Bajo consumo**: Ideal para aplicaciones embebidas
+- **Común en kits educativos y de prototipado**
+
+El TM1638 es especialmente popular en calculadoras digitales, cronómetros y paneles de control por su combinación de display de alta visibilidad y entrada de usuario integrada.
+
 ## Características
 
 - ✅ Operaciones: suma (+), resta (-), multiplicación (*), división (/)
@@ -66,10 +83,40 @@ CalculadorapuntoFlotante-Tm1638/
 
 - **Tang Nano 9K** con Monitor 6502 v2.2.0+
 - **Módulo TM1638** (QYF-TM1638: 8 dígitos, 16 botones)
-- Conexiones TM1638:
-  - STB (Strobe): Puerto configurable
-  - CLK (Clock): Puerto configurable  
-  - DIO (Data): Puerto configurable
+
+### Configuración de Pines
+
+Este proyecto está configurado para que el dispositivo TM1638 esté conectado al **puerto 0xC000** con los siguientes pines:
+
+- **Bit 0 - CLK (Clock)**: Señal de reloj para sincronización
+- **Bit 1 - DIO (Data Input/Output)**: Línea de datos bidireccional
+- **Bit 2 - STB (Strobe)**: Señal de selección del chip
+
+### Dónde Obtener el Módulo TM1638
+
+El módulo TM1638 es muy económico y ampliamente disponible en plataformas de comercio electrónico:
+
+- **AliExpress**: Buscar "TM1638" o "QYF TM1638" - Costo típico: $2-5 USD
+  - Disponible en múltiples vendedores
+  - Tiempo de envío: 10-30 días (envío estándar)
+  - Opción de envío express disponible
+  
+- **eBay**: Buscar "TM1638 module" - Similar en precio y disponibilidad
+
+- **Banggood**: Otra plataforma asiática con precios competitivos
+
+- **Amazon**: Disponible a precios más elevados pero con envío rápido
+
+**Recomendaciones:**
+- Verificar que sea el modelo "8 dígitos + 16 botones" (QYF-TM1638)
+- Los módulos de 8 dígitos sin botones NO funcionan con este código
+- Algunos vendedores venden tanto módulos sueltos como con cable pre-soldado
+- El módulo viene con 3 pins de conexión (VCC, GND, datos) - NO requiere voltajes especiales
+
+**Alternativa de clones:**
+- Muchos vendedores en AliExpress ofrecen módulos TM1638 compatibles de diferentes marcas
+- La mayoría funcionan igual si tienen la misma estructura (8 dígitos de 7 segmentos + 16 botones)
+- Precio: generalmente entre $1-3 USD con envío internacional
 
 ## Software Requerido
 
