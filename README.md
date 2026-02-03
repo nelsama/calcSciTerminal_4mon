@@ -184,6 +184,12 @@ Mantener presionada la tecla [.] por 1 segundo para reiniciar la calculadora.
 - Display máximo de 8 caracteres (incluyendo signo y punto)
 - División por cero no está validada
 
+## 💖 Apóyame
+
+Si disfrutas de este proyecto, considera apoyarme:
+
+[![Support me on Ko-fi](https://img.shields.io/badge/Ko--fi-Apóyame-FF5E5B?logo=kofi&logoColor=white&style=for-the-badge)](https://ko-fi.com/nelsonfigueroa2k)
+
 ## Licencia
 
 Este proyecto usa código de MSBasic (dominio público) y está disponible bajo licencia MIT.
