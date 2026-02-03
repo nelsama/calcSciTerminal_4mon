@@ -123,6 +123,8 @@ El módulo TM1638 es muy económico y ampliamente disponible en plataformas de c
 - **CC65** instalado en `D:\cc65` (o ajustar ruta en makefile)
 - **Monitor 6502 v2.2.0+** con ROM API
 - **Librería TM1638** en `../../libs/tm1638-6502-cc65`
+  - Repositorio: https://github.com/nelsama/tm1638-6502-cc65
+  - Librería de control para el módulo TM1638 (display + teclado)
 
 ## Compilación
 
