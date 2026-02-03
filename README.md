@@ -4,7 +4,7 @@ Calculadora de punto flotante completa usando el módulo **TM1638** (display de 
 
 ## Módulo TM1638
 
-![TM1638 Display Module](docs/images/tm1638.jpg)
+![TM1638 Display Module](docs/images/tm1638-7.png)
 
 ### Acerca del TM1638
 
