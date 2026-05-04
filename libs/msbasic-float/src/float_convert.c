@@ -10,10 +10,6 @@
 #include <stdint.h>
 #include "msbasic_float.h"
 
-/* Funciones externas para debug */
-extern void uart_print(const char *str);
-extern void uart_print_hex(uint8_t b);
-
 /* Constantes pre-calculadas en formato MSBasic */
 
 /* 10.0 en formato MSBasic */
@@ -170,6 +166,8 @@ void fp_float_to_string(const msbasic_float_t *value, char *buffer, uint8_t max_
     /* Calcular decimales disponibles */
     max_decimals = max_len - 1 - (negative ? 1 : 0) - int_len - 1;
     if (max_decimals > 6) max_decimals = 6;
+    /* Si no hay espacio ni para el punto, no mostramos decimales */
+    if (max_decimals > max_len) max_decimals = 0;
     
     /* Construir string: signo */
     if (negative) {
@@ -202,7 +200,6 @@ void fp_float_to_string(const msbasic_float_t *value, char *buffer, uint8_t max_
             uint8_t e = 0x80 + 24;  /* Empezar asumiendo 24 bits */
             
             /* Normalizar: desplazar hasta que el bit 23 esté en 1 */
-            /* y el bit 24 esté en 0 */
             while (val < 0x800000UL && e > 0x81) {
                 val <<= 1;
                 e--;

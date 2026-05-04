@@ -21,16 +21,20 @@ El TM1638 es especialmente popular en calculadoras digitales, cronómetros y pan
 
 ## Características
 
-- ✅ Operaciones: suma (+), resta (-), multiplicación (*), división (/)
+- ✅ Operaciones: suma (+), resta (-), multiplicación (\*), división (/)
+- ✅ Operaciones encadenadas: el resultado se reutiliza como primer operando
+- ✅ Repetición de operación: presionar `=` múltiples veces repite la última operación
 - ✅ Números grandes hasta ~16 millones
 - ✅ Decimales pequeños (ej: 0.000123)
 - ✅ Precisión: ~6-7 dígitos significativos
 - ✅ Redondeo inteligente (122.9999 → 123)
 - ✅ Números periódicos (1/3 = 0.333333)
-- ✅ Operaciones encadenadas (resultado anterior como primer operando)
 - ✅ Usa rutinas de punto flotante de **MSBasic**
 - ✅ Display adapta decimales según espacio disponible
 - ✅ Interfaz tipo calculadora estándar
+- ✅ Registro de operaciones por UART en formato legible
+- ✅ Comando `quit` por UART para volver al monitor
+- ✅ Validación de división por cero (muestra `DIV/0`)
 
 ## Distribución del Teclado
 
@@ -42,8 +46,9 @@ El TM1638 es especialmente popular en calculadoras digitales, cronómetros y pan
 ```
 
 - **.**: Punto decimal (permite ingresar números con decimales)
-- **=**: Igual (ejecuta la operación)
+- **=**: Igual (ejecuta la operación). Presionar repetidamente repite la última operación
 - **Presión larga de [.]** (1 segundo): Clear - reinicia la calculadora
+- **DIV/0**: Se muestra en el display si se intenta dividir por cero
 
 ## Ejemplos de Operaciones
 
@@ -55,6 +60,7 @@ El TM1638 es especialmente popular en calculadoras digitales, cronómetros y pan
 | 0.000123 × 1000000 | 123 |
 | 55555 × 80 | 4444400 |
 | 1.2 - 3 | -1.8 |
+| 10 + 5 = 15, luego = | 20 (repite: 15 + 5) |
 
 ## Estructura del Proyecto
 
@@ -159,13 +165,29 @@ R 0800
 La calculadora funciona como una calculadora estándar:
 
 1. **Ingresar primer número** (con dígitos y opcionalmente punto decimal)
-2. **Presionar operación** (+, -, *, /)
+2. **Presionar operación** (+, -, \*, /)
 3. **Ingresar segundo número**
 4. **Presionar =** para ver el resultado
-5. El resultado se puede usar como primer operando de la siguiente operación
+5. **Presionar =** nuevamente para repetir la última operación con el nuevo resultado
 
 ### Clear (Limpiar)
 Mantener presionada la tecla [.] por 1 segundo para reiniciar la calculadora.
+
+### Salir (Quit)
+En la terminal UART, escriba `quit` (o solo `q`) y presione Enter para volver al monitor 6502. Al salir, el display TM1638 se apaga automáticamente.
+
+### Registro en UART
+Cada operación se muestra automáticamente en la terminal en formato legible. Esto permite mantener un historial visible de todos los cálculos realizados durante la sesión:
+
+```
+-- Inicio de sesion --
+10 + 5 = 15
+CLEAR
+20 * 2 = 40
+40 * 2 = 80
+5 / 0 = DIV/0
+-- Fin de sesion --
+```
 
 ## Detalles Técnicos
 
@@ -182,7 +204,6 @@ Mantener presionada la tecla [.] por 1 segundo para reiniciar la calculadora.
 ### Limitaciones
 - Números mayores a ~16 millones muestran "ERR"
 - Display máximo de 8 caracteres (incluyendo signo y punto)
-- División por cero no está validada
 
 ## Licencia
 

@@ -13,12 +13,18 @@
  * 
  * Nota: Mantener presionado [.] (tecla 13) por 1 segundo hace Clear (C)
  * 
+ * UART:
+ *   Escriba "quit" o "q" + Enter para volver al monitor 6502.
+ *   Cada operación se registra en la consola (ej: 1.2 + 3.4 = 4.6)
+ * 
  * Uso:
  *   LOAD CALC 0800
  *   R 0800
  * 
  * ROM API utilizada:
  *   - rom_uart_putc()   - Enviar caracteres
+ *   - rom_uart_getc()   - Recibir caracteres
+ *   - rom_uart_rx_ready() - Verificar si hay datos disponibles
  *   - rom_delay_ms()    - Delays en milisegundos
  * ============================================================================
  */
@@ -41,13 +47,14 @@
 #define KEY_DEBOUNCE_MS 150     /* Tiempo de anti-rebote */
 #define LONG_PRESS_MS   1000    /* Tiempo para presión larga (1 segundo) */
 #define SHORT_PRESS_MS  100     /* Tiempo mínimo para detectar punto (100ms) */
+#define UART_BUF_LEN    16      /* Buffer para comandos UART */
 
 /* Versión del programa */
 #define VERSION_MAJOR   1
-#define VERSION_MINOR   2
+#define VERSION_MINOR   3
 #define VERSION_PATCH   0
-#define VERSION_STR     "1.2.0"      /* Para UART */
-#define VERSION_DISPLAY "CAL  1.2"   /* Para TM1638 (8 chars max) */
+#define VERSION_STR     "1.3.0"      /* Para UART */
+#define VERSION_DISPLAY "CAL  1.3"   /* Para TM1638 (8 chars max) */
 
 /* Estados de la calculadora */
 typedef enum {
@@ -66,6 +73,15 @@ typedef enum {
     OP_DIV
 } operation_t;
 
+/* Símbolos de operación para mostrar en UART */
+static const char * const op_symbols[] = {
+    "",    /* OP_NONE */
+    " + ", /* OP_ADD */
+    " - ", /* OP_SUB */
+    " * ", /* OP_MUL */
+    " / "  /* OP_DIV */
+};
+
 /* ============================================================================
  * VARIABLES GLOBALES
  * ============================================================================ */
@@ -79,6 +95,11 @@ static msbasic_float_t result;                   /* Resultado */
 static uint8_t decimal_entered = 0;              /* Flag para punto decimal */
 static uint8_t last_key = 0;                     /* Última tecla presionada */
 static uint8_t key_processed = 0;                /* Flag para indicar que tecla ya se procesó */
+static operation_t last_op = OP_NONE;             /* Última operación para repetición con = */
+
+/* Buffer para registro UART de la operación actual */
+static char uart_op1_str[MAX_INPUT_LEN + 1];     /* String del primer operando */
+static char uart_op2_str[MAX_INPUT_LEN + 1];     /* String del segundo operando */
 
 /* ============================================================================
  * FUNCIONES AUXILIARES
@@ -89,11 +110,9 @@ void uart_print(const char *s) {
     while (*s) rom_uart_putc(*s++);
 }
 
-/* Imprimir byte en hexadecimal */
-void uart_print_hex(uint8_t b) {
-    const char hex[] = "0123456789ABCDEF";
-    rom_uart_putc(hex[b >> 4]);
-    rom_uart_putc(hex[b & 0x0F]);
+/* Enviar un caracter por UART */
+void uart_putc(char c) {
+    rom_uart_putc(c);
 }
 
 /* Inicializar buffer de entrada */
@@ -102,6 +121,11 @@ void clear_input(void) {
     input_buffer[0] = '0';
     input_buffer[1] = '\0';
     decimal_entered = 0;
+}
+
+/* Convertir float a string para UART (usa un buffer interno estático) */
+void float_to_str(const msbasic_float_t *value, char *buf, uint8_t maxlen) {
+    fp_float_to_string(value, buf, maxlen);
 }
 
 /* Actualizar display con el contenido del buffer */
@@ -177,41 +201,6 @@ void add_decimal(void) {
     }
 }
 
-/* Debug: imprimir FAC desde assembly */
-void debug_print_fac(void) {
-    extern uint8_t FAC[];
-    uart_print("FAC=[");
-    uart_print_hex(FAC[0]);
-    uart_print(",");
-    uart_print_hex(FAC[1]);
-    uart_print(",");
-    uart_print_hex(FAC[2]);
-    uart_print("] ");
-}
-
-/* Debug: imprimir ARG desde assembly */
-void debug_print_arg(void) {
-    extern uint8_t ARG[];
-    uart_print("ARG=[");
-    uart_print_hex(ARG[0]);
-    uart_print(",");
-    uart_print_hex(ARG[1]);
-    uart_print(",");
-    uart_print_hex(ARG[2]);
-    uart_print("] ");
-}
-
-/* Debug: imprimir buffer temporal */
-void debug_print_temp(const uint8_t *ptr) {
-    uart_print("TEMP=[");
-    uart_print_hex(ptr[0]);
-    uart_print(",");
-    uart_print_hex(ptr[1]);
-    uart_print(",");
-    uart_print_hex(ptr[2]);
-    uart_print("] ");
-}
-
 /* Tabla de constantes pre-calculadas en formato MSBasic 
  * Generadas con Microsoft BASIC real 
  * Formato: [exp][mantisa_byte1][mantisa_byte2][mantisa_byte3][signo]
@@ -235,51 +224,9 @@ const msbasic_float_t float_constants[] = {
     {{0x84, 0x70, 0x00, 0x00, 0x00}},  /* 15 */
 };
 
-/* Constante para 10.0 */
-const msbasic_float_t float_ten = {{0x84, 0x20, 0x00, 0x00, 0x00}};
-
 /* Guardar el input actual como número flotante */
 void save_current_input(msbasic_float_t *dest) {
-    uint8_t i;
-    int16_t parte_entera = 0;
-    uint8_t encontro_punto = 0;
-    
-    uart_print("\r\nDEBUG save_current_input: buffer='");
-    uart_print(input_buffer);
-    uart_print("'");
-    
-    /* Parsear para obtener parte entera (solo para debug y optimización) */
-    for (i = 0; input_buffer[i] != '\0'; i++) {
-        if (input_buffer[i] == '.') {
-            encontro_punto = 1;
-        } else if (input_buffer[i] >= '0' && input_buffer[i] <= '9' && !encontro_punto) {
-            if (parte_entera < 3000) {
-                parte_entera = parte_entera * 10 + (input_buffer[i] - '0');
-            }
-        }
-    }
-    
-    uart_print(" parte_entera=");
-    uart_print_hex((parte_entera >> 8) & 0xFF);
-    uart_print_hex(parte_entera & 0xFF);
-    
-    /* Usar tabla de constantes solo para enteros simples 0-15 */
-    if (parte_entera >= 0 && parte_entera <= 15 && !encontro_punto) {
-        *dest = float_constants[parte_entera];
-        uart_print(" usando tabla[");
-        uart_print_hex(parte_entera);
-        uart_print("]\r\n");
-        return;
-    }
-    
-    /* Para todos los demás casos, usar fp_string_to_float */
     fp_string_to_float(input_buffer, dest);
-    
-    uart_print(" usando fp_string_to_float: ");
-    uart_print_hex(dest->bytes[0]);
-    uart_print(" ");
-    uart_print_hex(dest->bytes[1]);
-    uart_print("\r\n");
 }
 
 /* Mostrar número flotante en el display */
@@ -293,31 +240,58 @@ void display_float(const msbasic_float_t *value) {
     update_display();
 }
 
-/* Ejecutar operación */
-void execute_operation(void) {
-    uart_print("\r\nDEBUG execute_operation: op=");
-    uart_print_hex(current_op);
-    uart_print("\r\n  op1: ");
-    uart_print_hex(operand1.bytes[0]);
-    uart_print(" ");
-    uart_print_hex(operand1.bytes[1]);
-    uart_print(" ");
-    uart_print_hex(operand1.bytes[2]);
-    uart_print(" ");
-    uart_print_hex(operand1.bytes[3]);
-    uart_print(" ");
-    uart_print_hex(operand1.bytes[4]);
-    uart_print("\r\n  op2: ");
-    uart_print_hex(operand2.bytes[0]);
-    uart_print(" ");
-    uart_print_hex(operand2.bytes[1]);
-    uart_print(" ");
-    uart_print_hex(operand2.bytes[2]);
-    uart_print(" ");
-    uart_print_hex(operand2.bytes[3]);
-    uart_print(" ");
-    uart_print_hex(operand2.bytes[4]);
+/* Mostrar mensaje de error en el display (máx 8 caracteres) */
+void show_error(const char *msg) {
+    uint8_t i;
+    for (i = 0; i < 8 && msg[i] != '\0'; i++) {
+        input_buffer[i] = msg[i];
+    }
+    input_buffer[i] = '\0';
+    input_len = i;
+    tm1638_show_text(input_buffer);
+}
+
+/* Verificar si un número MSBasic es cero */
+uint8_t fp_is_zero(const msbasic_float_t *val) {
+    return val->bytes[0] == 0;
+}
+
+/* Guardar string del operando actual para registro UART */
+void uart_save_operand_str(char *dest) {
+    uint8_t i;
+    for (i = 0; i <= input_len && i < MAX_INPUT_LEN; i++) {
+        dest[i] = input_buffer[i];
+    }
+    dest[MAX_INPUT_LEN] = '\0';
+}
+
+/* Registrar la operación completa en UART: "1.2 + 3.4 = 4.6\r\n" */
+void uart_log_operation(void) {
+    char res_str[MAX_INPUT_LEN + 1];
     
+    /* Convertir resultado a string */
+    float_to_str(&result, res_str, MAX_INPUT_LEN);
+    
+    /* Imprimir: operand1 + op + operand2 = resultado */
+    uart_print(uart_op1_str);
+    uart_print(op_symbols[current_op]);
+    uart_print(uart_op2_str);
+    uart_print(" = ");
+    uart_print(res_str);
+    uart_print("\r\n");
+}
+
+/* Registrar error en UART: "1.2 / 0 = DIV/0\r\n" */
+void uart_log_error(void) {
+    uart_print(uart_op1_str);
+    uart_print(op_symbols[current_op]);
+    uart_print(uart_op2_str);
+    uart_print(" = DIV/0\r\n");
+}
+
+/* Ejecutar operación */
+/* Retorna 0 si OK, 1 si hubo error (ej: división por cero) */
+uint8_t execute_operation(void) {
     switch (current_op) {
         case OP_ADD:
             fp_add(&operand1, &operand2, &result);
@@ -329,6 +303,10 @@ void execute_operation(void) {
             fp_mul(&operand1, &operand2, &result);
             break;
         case OP_DIV:
+            if (fp_is_zero(&operand2)) {
+                show_error("DIV/0   ");
+                return 1;  /* Error */
+            }
             fp_div(&operand1, &operand2, &result);
             break;
         default:
@@ -336,18 +314,7 @@ void execute_operation(void) {
             result = operand1;
             break;
     }
-    
-    uart_print("\r\n  res: ");
-    uart_print_hex(result.bytes[0]);
-    uart_print(" ");
-    uart_print_hex(result.bytes[1]);
-    uart_print(" ");
-    uart_print_hex(result.bytes[2]);
-    uart_print(" ");
-    uart_print_hex(result.bytes[3]);
-    uart_print(" ");
-    uart_print_hex(result.bytes[4]);
-    uart_print("\r\n");
+    return 0;  /* OK */
 }
 
 /* Ejecutar limpieza (Clear) */
@@ -355,10 +322,62 @@ void do_clear(void) {
     clear_input();
     state = STATE_FIRST_NUMBER;
     current_op = OP_NONE;
+    last_op = OP_NONE;
     update_display();
+    /* Registrar clear en UART */
+    uart_print("CLEAR\r\n");
 }
 
-/* Procesar tecla presionada */
+/* Procesar comando UART */
+/* Retorna 1 si se debe salir (quit), 0 si no */
+uint8_t process_uart_command(const char *cmd, uint8_t len) {
+    /* Comando: "quit" o "q" */
+    if (len == 1 && cmd[0] == 'q') return 1;
+    if (len == 4 && cmd[0] == 'q' && cmd[1] == 'u' && cmd[2] == 'i' && cmd[3] == 't') return 1;
+    return 0;
+}
+
+/* Leer y procesar un comando UART */
+/* Retorna 1 si se debe salir, 0 si no */
+uint8_t check_uart_command(void) {
+    static char uart_buf[UART_BUF_LEN];
+    static uint8_t uart_pos = 0;
+    char c;
+    
+    while (rom_uart_rx_ready()) {
+        c = rom_uart_getc();
+        
+        if (c == '\r' || c == '\n') {
+            /* Fin de línea - procesar comando */
+            uart_buf[uart_pos] = '\0';
+            if (uart_pos > 0) {
+                if (process_uart_command(uart_buf, uart_pos)) {
+                    uart_pos = 0;
+                    return 1;  /* Quit */
+                }
+            }
+            uart_pos = 0;
+        } else if (c == '\b' || c == 127) {
+            /* Backspace */
+            if (uart_pos > 0) uart_pos--;
+        } else if (uart_pos < UART_BUF_LEN - 1) {
+            uart_buf[uart_pos++] = c;
+        }
+    }
+    return 0;  /* No quit */
+}
+
+/* Guardar string del resultado actual en uart_op1_str para operaciones encadenadas */
+void uart_save_result_as_op1(void) {
+    /* input_buffer contiene el string del resultado (display_float lo escribió ahí) */
+    uint8_t i;
+    for (i = 0; i <= input_len && i < MAX_INPUT_LEN; i++) {
+        uart_op1_str[i] = input_buffer[i];
+    }
+    uart_op1_str[MAX_INPUT_LEN] = '\0';
+}
+
+/* Procesar tecla presionada del TM1638 */
 void process_key(uint8_t key) {
     /* Mapeo de teclas según el layout deseado:
      * Hardware QYF-TM1638:     Layout deseado:
@@ -387,10 +406,14 @@ void process_key(uint8_t key) {
         case 4: /* Tecla + */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
+                uart_save_operand_str(uart_op1_str);
             } else if (state == STATE_RESULT) {
-                /* operand1 ya tiene el resultado */
+                /* En STATE_RESULT, operand1 ya tiene el resultado.
+                 * input_buffer tiene el string visible. Lo guardamos como op1_str. */
+                uart_save_result_as_op1();
             }
             current_op = OP_ADD;
+            last_op = OP_ADD;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
@@ -398,10 +421,12 @@ void process_key(uint8_t key) {
         case 8: /* Tecla - */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
+                uart_save_operand_str(uart_op1_str);
             } else if (state == STATE_RESULT) {
-                /* operand1 ya tiene el resultado */
+                uart_save_result_as_op1();
             }
             current_op = OP_SUB;
+            last_op = OP_SUB;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
@@ -409,10 +434,12 @@ void process_key(uint8_t key) {
         case 12: /* Tecla * */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
+                uart_save_operand_str(uart_op1_str);
             } else if (state == STATE_RESULT) {
-                /* operand1 ya tiene el resultado */
+                uart_save_result_as_op1();
             }
             current_op = OP_MUL;
+            last_op = OP_MUL;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
@@ -420,23 +447,41 @@ void process_key(uint8_t key) {
         case 16: /* Tecla / */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
+                uart_save_operand_str(uart_op1_str);
             } else if (state == STATE_RESULT) {
-                /* operand1 ya tiene el resultado */
+                uart_save_result_as_op1();
             }
             current_op = OP_DIV;
+            last_op = OP_DIV;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
         
         case 15: /* Tecla = */
-            if (state == STATE_SECOND_NUMBER) {
-                save_current_input(&operand2);
-                execute_operation();
-                display_float(&result);
-                state = STATE_RESULT;
-                
-                /* Preparar operand1 con el resultado para operaciones encadenadas */
-                operand1 = result;
+            if (state == STATE_SECOND_NUMBER || state == STATE_RESULT) {
+                /* En STATE_RESULT: repetir la ultima operacion (last_op) con
+                 * operand1 = resultado anterior y operand2 = el mismo de antes.
+                 * En STATE_SECOND_NUMBER: guardar el segundo operando ingresado. */
+                if (state == STATE_SECOND_NUMBER) {
+                    save_current_input(&operand2);
+                    uart_save_operand_str(uart_op2_str);
+                } else {
+                    /* STATE_RESULT sin nuevo operador: restaurar ultima operacion */
+                    current_op = last_op;
+                }
+                if (execute_operation() == 0) {
+                    display_float(&result);
+                    /* Registrar operacion en UART */
+                    uart_log_operation();
+                    /* Preparar operand1 con el resultado para reutilizarlo */
+                    operand1 = result;
+                    /* Guardar string del resultado como op1_str para la prox operacion */
+                    uart_save_result_as_op1();
+                    state = STATE_RESULT;
+                } else {
+                    /* Error (ej: division por cero) - registrar en UART */
+                    uart_log_error();
+                }
                 current_op = OP_NONE;
             }
             break;
@@ -464,7 +509,9 @@ int main(void) {
     uart_print("  [4] [5] [6] [-]\r\n");
     uart_print("  [7] [8] [9] [*]\r\n");
     uart_print("  [.] [0] [=] [/]\r\n");
-    uart_print("Mantener [.] 1seg = Clear\r\n\r\n");
+    uart_print("Mantener [.] 1seg = Clear\r\n");
+    uart_print("Escriba 'quit' o 'q' + Enter para salir\r\n\r\n");
+    uart_print("-- Inicio de sesion --\r\n");
     
     /* Apagar LEDs del hardware (si existen) */
     LEDS = 0xFF;
@@ -489,9 +536,19 @@ int main(void) {
     
     /* Loop principal */
     while (1) {
-        uint16_t dot_hold_count = 0;  /* Contador para presión del punto */
+        /* Verificar si hay comando UART (quit) */
+        if (check_uart_command()) {
+            uart_print("\r\n-- Fin de sesion --\r\n");
+            /* Apagar display TM1638 */
+            tm1638_show_text("        ");  /* 8 espacios = display vacio */
+            tm1638_set_brightness(0);         /* Brillo minimo */
+            /* Apagar LEDs del hardware */
+            LEDS = 0x00;
+            uart_print("Volviendo al monitor 6502...\r\n");
+            break;  /* Sale del while y retorna al monitor */
+        }
         
-        /* Leer tecla presionada */
+        /* Leer tecla presionada del TM1638 */
         key = tm1638_get_key_pressed();
         
         if (key > 0) {
@@ -508,6 +565,8 @@ int main(void) {
             }
             /* Si es el punto y sigue presionado */
             else if (key == 13 && !key_processed) {
+                uint16_t dot_hold_count;
+                
                 /* Contar tiempo de presión */
                 dot_hold_count = 0;
                 while (tm1638_get_key_pressed() == 13) {
@@ -529,16 +588,14 @@ int main(void) {
                 }
             }
             
-            /* Pequeño delay para no saturar el bus */
-            rom_delay_ms(10);
-            
         } else {
             /* Tecla liberada - resetear estado */
             last_key = 0;
             key_processed = 0;
-            
-            rom_delay_ms(10);  /* Pequeño delay para no saturar el bus */
         }
+        
+        /* Pequeño delay para no saturar el bus TM1638 */
+        rom_delay_ms(10);
     }
     
     return 0;
