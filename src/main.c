@@ -176,11 +176,9 @@ uint8_t is_negative(void) {
 void toggle_sign(void) {
     uint8_t i;
     
-    /* Si estamos mostrando resultado o hay un cero, no hacemos nada */
-    if (state == STATE_RESULT) return;
-    
     /* Si el buffer es "0" (y solo "0"), no cambiar signo */
     if (input_len == 1 && input_buffer[0] == '0') return;
+    if (input_len == 2 && input_buffer[0] == '-' && input_buffer[1] == '0') return;
     
     if (is_negative()) {
         /* Quitar signo negativo: mover todo un lugar a la izquierda */
@@ -199,6 +197,13 @@ void toggle_sign(void) {
             input_buffer[input_len] = '\0';
         }
     }
+    
+    /* Si estamos en STATE_RESULT, actualizar operand1 con el nuevo signo */
+    if (state == STATE_RESULT) {
+        save_current_input(&operand1);
+        uart_save_result_as_op1();
+    }
+    
     update_display();
 }
 
