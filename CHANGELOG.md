@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto.
 
+## [1.4.1] - 2026-01-19
+
+### Corregido
+- **Presión larga de `-`**: Reducido el tiempo de espera de 1000ms a 500ms para que el cambio de signo sea más responsivo
+
+### Versión
+- Actualizada a v1.4.1
+
 ## [1.4.0] - 2026-01-19
 
 ### Agregado

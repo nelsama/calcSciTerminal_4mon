@@ -55,8 +55,8 @@
 /* Versión del programa */
 #define VERSION_MAJOR   1
 #define VERSION_MINOR   4
-#define VERSION_PATCH   0
-#define VERSION_STR     "1.4.0"      /* Para UART */
+#define VERSION_PATCH   1
+#define VERSION_STR     "1.4.1"      /* Para UART */
 #define VERSION_DISPLAY "CAL  1.4"   /* Para TM1638 (8 chars max) */
 
 /* IDs de teclas del TM1638 */
@@ -107,6 +107,10 @@ static operation_t last_op = OP_NONE;             /* Última operación para rep
 /* Buffer para registro UART de la operación actual */
 static char uart_op1_str[MAX_INPUT_LEN + 1];     /* String del primer operando */
 static char uart_op2_str[MAX_INPUT_LEN + 1];     /* String del segundo operando */
+
+/* Prototipos de funciones */
+uint8_t is_negative(void);
+void toggle_sign(void);
 
 /* ============================================================================
  * FUNCIONES AUXILIARES
@@ -165,46 +169,6 @@ void update_display(void) {
     }
     
     tm1638_show_text(display);
-}
-
-/* Verificar si el buffer actual tiene signo negativo */
-uint8_t is_negative(void) {
-    return (input_len > 0 && input_buffer[0] == '-');
-}
-
-/* Cambiar signo del número actual (+/-) */
-void toggle_sign(void) {
-    uint8_t i;
-    
-    /* Si el buffer es "0" (y solo "0"), no cambiar signo */
-    if (input_len == 1 && input_buffer[0] == '0') return;
-    if (input_len == 2 && input_buffer[0] == '-' && input_buffer[1] == '0') return;
-    
-    if (is_negative()) {
-        /* Quitar signo negativo: mover todo un lugar a la izquierda */
-        for (i = 1; i <= input_len; i++) {
-            input_buffer[i - 1] = input_buffer[i];
-        }
-        input_len--;
-    } else {
-        /* Agregar signo negativo: mover todo un lugar a la derecha */
-        if (input_len < MAX_INPUT_LEN) {
-            for (i = input_len; i > 0; i--) {
-                input_buffer[i] = input_buffer[i - 1];
-            }
-            input_buffer[0] = '-';
-            input_len++;
-            input_buffer[input_len] = '\0';
-        }
-    }
-    
-    /* Si estamos en STATE_RESULT, actualizar operand1 con el nuevo signo */
-    if (state == STATE_RESULT) {
-        save_current_input(&operand1);
-        uart_save_result_as_op1();
-    }
-    
-    update_display();
 }
 
 /* Agregar dígito al buffer */
@@ -431,6 +395,46 @@ void uart_save_result_as_op1(void) {
     uart_op1_str[MAX_INPUT_LEN] = '\0';
 }
 
+/* Verificar si el buffer actual tiene signo negativo */
+uint8_t is_negative(void) {
+    return (input_len > 0 && input_buffer[0] == '-');
+}
+
+/* Cambiar signo del numero actual (+/-) */
+void toggle_sign(void) {
+    uint8_t i;
+    
+    /* Si el buffer es "0" (y solo "0"), no cambiar signo */
+    if (input_len == 1 && input_buffer[0] == '0') return;
+    if (input_len == 2 && input_buffer[0] == '-' && input_buffer[1] == '0') return;
+    
+    if (is_negative()) {
+        /* Quitar signo negativo: mover todo un lugar a la izquierda */
+        for (i = 1; i <= input_len; i++) {
+            input_buffer[i - 1] = input_buffer[i];
+        }
+        input_len--;
+    } else {
+        /* Agregar signo negativo: mover todo un lugar a la derecha */
+        if (input_len < MAX_INPUT_LEN) {
+            for (i = input_len; i > 0; i--) {
+                input_buffer[i] = input_buffer[i - 1];
+            }
+            input_buffer[0] = '-';
+            input_len++;
+            input_buffer[input_len] = '\0';
+        }
+    }
+    
+    /* Si estamos en STATE_RESULT, actualizar operand1 con el nuevo signo */
+    if (state == STATE_RESULT) {
+        save_current_input(&operand1);
+        uart_save_result_as_op1();
+    }
+    
+    update_display();
+}
+
 /* Procesar tecla presionada del TM1638 (solo presión corta) */
 void process_key(uint8_t key) {
     /* Mapeo de teclas según el layout deseado:
@@ -554,8 +558,8 @@ uint8_t wait_key_release_with_timeout(uint8_t expected_key, uint16_t *hold_count
         rom_delay_ms(10);
         count++;
         
-        /* Si pasó LONG_PRESS_MS (100 * 10ms = 1000ms) */
-        if (count >= 100) {
+        /* Si pasó LONG_PRESS_MS (50 * 10ms = 500ms) */
+        if (count >= 50) {
             *hold_count_out = count;
             return 1;  /* Presión larga */
         }
@@ -589,8 +593,8 @@ int main(void) {
     uart_print("  [4] [5] [6] [-]\r\n");
     uart_print("  [7] [8] [9] [*]\r\n");
     uart_print("  [.] [0] [=] [/]\r\n");
-    uart_print("Mantener [.] 1seg = Clear\r\n");
-    uart_print("Mantener [-] 1seg = Cambiar signo (+/-)\r\n");
+    uart_print("Mantener [.] 500ms = Clear\r\n");
+    uart_print("Mantener [-] 500ms = Cambiar signo (+/-)\r\n");
     uart_print("Escriba 'quit' o 'q' + Enter para salir\r\n\r\n");
     uart_print("-- Inicio de sesion --\r\n");
     

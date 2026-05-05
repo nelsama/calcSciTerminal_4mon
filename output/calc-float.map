@@ -10,144 +10,144 @@ msbasic_float_only.o:
     CODE              Offs=0002BA  Size=00082A  Align=00001  Fill=0000
     ZEROPAGE          Offs=000006  Size=000078  Align=00001  Fill=0000
 main.o:
-    CODE              Offs=000AE4  Size=000BCD  Align=00001  Fill=0000
+    CODE              Offs=000AE4  Size=000BEC  Align=00001  Fill=0000
     RODATA            Offs=000000  Size=00024E  Align=00001  Fill=0000
     BSS               Offs=000005  Size=000046  Align=00001  Fill=0000
     DATA              Offs=000000  Size=00000B  Align=00001  Fill=0000
 float_convert.o:
-    CODE              Offs=0016B1  Size=0007AF  Align=00001  Fill=0000
+    CODE              Offs=0016D0  Size=0007AF  Align=00001  Fill=0000
     RODATA            Offs=00024E  Size=000041  Align=00001  Fill=0000
 tm1638.o:
-    CODE              Offs=001E60  Size=000CE9  Align=00001  Fill=0000
+    CODE              Offs=001E7F  Size=000CE9  Align=00001  Fill=0000
     RODATA            Offs=00028F  Size=00009A  Align=00001  Fill=0000
     BSS               Offs=00004B  Size=000001  Align=00001  Fill=0000
     DATA              Offs=00000B  Size=000001  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(add.o):
-    CODE              Offs=002B49  Size=00001C  Align=00001  Fill=0000
+    CODE              Offs=002B68  Size=00001C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(addysp.o):
-    CODE              Offs=002B65  Size=00000E  Align=00001  Fill=0000
+    CODE              Offs=002B84  Size=00000E  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(along.o):
-    CODE              Offs=002B73  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002B92  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(aslax1.o):
-    CODE              Offs=002B80  Size=000008  Align=00001  Fill=0000
+    CODE              Offs=002B9F  Size=000008  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(asleax1.o):
-    CODE              Offs=002B88  Size=00000C  Align=00001  Fill=0000
+    CODE              Offs=002BA7  Size=00000C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(axlong.o):
-    CODE              Offs=002B94  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002BB3  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(call.o):
-    CODE              Offs=002BA1  Size=000007  Align=00001  Fill=0000
+    CODE              Offs=002BC0  Size=000007  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decax1.o):
-    CODE              Offs=002BA8  Size=000007  Align=00001  Fill=0000
+    CODE              Offs=002BC7  Size=000007  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decaxy.o):
-    CODE              Offs=002BAF  Size=000009  Align=00001  Fill=0000
+    CODE              Offs=002BCE  Size=000009  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp1.o):
-    CODE              Offs=002BB8  Size=000009  Align=00001  Fill=0000
+    CODE              Offs=002BD7  Size=000009  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp2.o):
-    CODE              Offs=002BC1  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002BE0  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp3.o):
-    CODE              Offs=002BCE  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002BED  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp4.o):
-    CODE              Offs=002BDB  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002BFA  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp5.o):
-    CODE              Offs=002BE8  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002C07  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(decsp6.o):
-    CODE              Offs=002BF5  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002C14  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(icmp.o):
-    CODE              Offs=002C02  Size=00002E  Align=00001  Fill=0000
+    CODE              Offs=002C21  Size=00002E  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incax1.o):
-    CODE              Offs=002C30  Size=000007  Align=00001  Fill=0000
+    CODE              Offs=002C4F  Size=000007  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incaxy.o):
-    CODE              Offs=002C37  Size=00000B  Align=00001  Fill=0000
+    CODE              Offs=002C56  Size=00000B  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp1.o):
-    CODE              Offs=002C42  Size=000007  Align=00001  Fill=0000
+    CODE              Offs=002C61  Size=000007  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp2.o):
-    CODE              Offs=002C49  Size=000016  Align=00001  Fill=0000
+    CODE              Offs=002C68  Size=000016  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp3.o):
-    CODE              Offs=002C5F  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=002C7E  Size=000005  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp4.o):
-    CODE              Offs=002C64  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=002C83  Size=000005  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp5.o):
-    CODE              Offs=002C69  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=002C88  Size=000005  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp6.o):
-    CODE              Offs=002C6E  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=002C8D  Size=000005  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(incsp8.o):
-    CODE              Offs=002C73  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=002C92  Size=000005  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(jmpvec.o):
     DATA              Offs=00000C  Size=000003  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(land.o):
-    CODE              Offs=002C78  Size=000024  Align=00001  Fill=0000
+    CODE              Offs=002C97  Size=000024  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lcmp.o):
-    CODE              Offs=002C9C  Size=00003B  Align=00001  Fill=0000
+    CODE              Offs=002CBB  Size=00003B  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ldaxi.o):
-    CODE              Offs=002CD7  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=002CF6  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ldaxsp.o):
-    CODE              Offs=002CE4  Size=000009  Align=00001  Fill=0000
+    CODE              Offs=002D03  Size=000009  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ldeaxysp.o):
-    CODE              Offs=002CED  Size=000013  Align=00001  Fill=0000
+    CODE              Offs=002D0C  Size=000013  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ldiv.o):
-    CODE              Offs=002D00  Size=00001C  Align=00001  Fill=0000
+    CODE              Offs=002D1F  Size=00001C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(leaaxsp.o):
-    CODE              Offs=002D1C  Size=00000C  Align=00001  Fill=0000
+    CODE              Offs=002D3B  Size=00000C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(leq.o):
-    CODE              Offs=002D28  Size=000006  Align=00001  Fill=0000
+    CODE              Offs=002D47  Size=000006  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lge.o):
-    CODE              Offs=002D2E  Size=000006  Align=00001  Fill=0000
+    CODE              Offs=002D4D  Size=000006  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(linc.o):
-    CODE              Offs=002D34  Size=000011  Align=00001  Fill=0000
+    CODE              Offs=002D53  Size=000011  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(llt.o):
-    CODE              Offs=002D45  Size=000006  Align=00001  Fill=0000
+    CODE              Offs=002D64  Size=000006  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lmod.o):
-    CODE              Offs=002D4B  Size=000020  Align=00001  Fill=0000
+    CODE              Offs=002D6A  Size=000020  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lne.o):
-    CODE              Offs=002D6B  Size=000006  Align=00001  Fill=0000
+    CODE              Offs=002D8A  Size=000006  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lneg.o):
-    CODE              Offs=002D71  Size=00001E  Align=00001  Fill=0000
+    CODE              Offs=002D90  Size=00001E  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lor.o):
-    CODE              Offs=002D8F  Size=000024  Align=00001  Fill=0000
+    CODE              Offs=002DAE  Size=000024  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lpop.o):
-    CODE              Offs=002DB3  Size=000015  Align=00001  Fill=0000
+    CODE              Offs=002DD2  Size=000015  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lpush.o):
-    CODE              Offs=002DC8  Size=000021  Align=00001  Fill=0000
+    CODE              Offs=002DE7  Size=000021  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lshelp.o):
-    CODE              Offs=002DE9  Size=000052  Align=00001  Fill=0000
+    CODE              Offs=002E08  Size=000052  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lshl.o):
-    CODE              Offs=002E3B  Size=00001A  Align=00001  Fill=0000
+    CODE              Offs=002E5A  Size=00001A  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lshr.o):
-    CODE              Offs=002E55  Size=00001A  Align=00001  Fill=0000
+    CODE              Offs=002E74  Size=00001A  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ltest.o):
-    CODE              Offs=002E6F  Size=00000F  Align=00001  Fill=0000
+    CODE              Offs=002E8E  Size=00000F  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(ludiv.o):
-    CODE              Offs=002E7E  Size=00007A  Align=00001  Fill=0000
+    CODE              Offs=002E9D  Size=00007A  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(lumod.o):
-    CODE              Offs=002EF8  Size=000019  Align=00001  Fill=0000
+    CODE              Offs=002F17  Size=000019  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(makebool.o):
-    CODE              Offs=002F11  Size=00002C  Align=00001  Fill=0000
+    CODE              Offs=002F30  Size=00002C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(memcpy.o):
-    CODE              Offs=002F3D  Size=00003C  Align=00001  Fill=0000
+    CODE              Offs=002F5C  Size=00003C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(mulax5.o):
-    CODE              Offs=002F79  Size=000014  Align=00001  Fill=0000
+    CODE              Offs=002F98  Size=000014  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(popptr1.o):
-    CODE              Offs=002F8D  Size=00000E  Align=00001  Fill=0000
+    CODE              Offs=002FAC  Size=00000E  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(pusha.o):
-    CODE              Offs=002F9B  Size=000016  Align=00001  Fill=0000
+    CODE              Offs=002FBA  Size=000016  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(pushax.o):
-    CODE              Offs=002FB1  Size=00001A  Align=00001  Fill=0000
+    CODE              Offs=002FD0  Size=00001A  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(pushwsp.o):
-    CODE              Offs=002FCB  Size=00001C  Align=00001  Fill=0000
+    CODE              Offs=002FEA  Size=00001C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(shl.o):
-    CODE              Offs=002FE7  Size=000033  Align=00001  Fill=0000
+    CODE              Offs=003006  Size=000033  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(shreax1.o):
-    CODE              Offs=00301A  Size=00000C  Align=00001  Fill=0000
+    CODE              Offs=003039  Size=00000C  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(staspidx.o):
-    CODE              Offs=003026  Size=000016  Align=00001  Fill=0000
+    CODE              Offs=003045  Size=000016  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(staxsp.o):
-    CODE              Offs=00303C  Size=00000B  Align=00001  Fill=0000
+    CODE              Offs=00305B  Size=00000B  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(steaxsp.o):
-    CODE              Offs=003047  Size=000015  Align=00001  Fill=0000
+    CODE              Offs=003066  Size=000015  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(sub.o):
-    CODE              Offs=00305C  Size=000015  Align=00001  Fill=0000
+    CODE              Offs=00307B  Size=000015  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(subysp.o):
-    CODE              Offs=003071  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=003090  Size=00000D  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(zeropage.o):
     ZEROPAGE          Offs=00007E  Size=00001A  Align=00001  Fill=0000
 
@@ -158,10 +158,10 @@ Name                   Start     End    Size  Align
 ----------------------------------------------------
 ZEROPAGE              000020  0000B7  000098  00001
 STARTUP               000800  000846  000047  00001
-CODE                  000847  0038C4  00307E  00001
-RODATA                0038C5  003BED  000329  00001
-DATA                  003BEE  003BFC  00000F  00001
-BSS                   003BFD  003C48  00004C  00001
+CODE                  000847  0038E3  00309D  00001
+RODATA                0038E4  003C0C  000329  00001
+DATA                  003C0D  003C1B  00000F  00001
+BSS                   003C1C  003C67  00004C  00001
 
 
 Exports list by name:
@@ -171,60 +171,60 @@ FAC                       0000CB RLZ    FACEXTENSION              0000DA REZ
 FACSIGN                   0000D0 RLZ    FADD                      000B43 RLA    
 FDIV                      000DEB RLA    FMULT                     000D04 RLA    
 FSUB                      000B2C RLA    QINT                      000F77 RLA    
-STORE_FAC_AT_YX_ROUNDED   000EB0 RLA    __BSS_RUN__               003BFD RLA    
+STORE_FAC_AT_YX_ROUNDED   000EB0 RLA    __BSS_RUN__               003C1C RLA    
 __BSS_SIZE__              00004C REA    __STARTUP__               000001 REA    
 _fp_add                   000847 RLA    _fp_clear_fac             000AE8 RLA    
-_fp_div                   000997 RLA    _fp_float_to_string       0020BE RLA    
+_fp_div                   000997 RLA    _fp_float_to_string       0020DD RLA    
 _fp_mul                   000927 RLA    _fp_save_fac              000AC7 RLA    
-_fp_string_to_float       001EF8 RLA    _fp_sub                   0008B7 RLA    
-_main                     001CF8 RLA    _memcpy                   003784 RLA    
-_tm1638_get_key_pressed   002D7A RLA    _tm1638_init              0026CD RLA    
-_tm1638_set_brightness    002CB9 RLA    _tm1638_show_text         002A84 RLA    
-addysp                    0033AD RLA    addysp1                   0033AC RLA    
-aslax1                    0033C7 RLA    aslaxy                    003835 RLA    
-aulong                    0033C0 RLA    axulong                   0033E1 RLA    
-booleq                    00375E RLA    boolge                    00376F RLA    
-boollt                    003767 RLA    boolne                    003758 RLA    
-callax                    0033E8 RLA    decax1                    0033EF RLA    
-decaxy                    0033F6 RLA    decsp1                    0033FF RLA    
-decsp2                    003408 RLA    decsp3                    003415 RLA    
-decsp4                    003422 RLA    decsp5                    00342F RLA    
-decsp6                    00343C RLA    getlop                    0036D6 RLA    
-incax1                    003477 RLA    incaxy                    003480 RLA    
-inceaxy                   00357B RLA    incsp1                    003489 RLA    
-incsp2                    003498 RLA    incsp3                    0034A6 RLA    
-incsp4                    0034AB RLA    incsp5                    0034B0 RLA    
-incsp6                    0034B5 RLA    incsp8                    0034BA RLA    
-jmpvec                    003BFA RLA    ldax0sp                   00352B RLA    
-ldaxi                     00351E RLA    ldaxysp                   00352D RLA    
-ldeax0sp                  003534 RLA    ldeaxysp                  003536 RLA    
-leaa0sp                   003563 RLA    mulax5                    0037C0 RLA    
-negeax                    0035B8 RLA    popax                     003490 RLA    
-popeax                    0035FA RLA    poplsargs                 003630 RLA    
-popptr1                   0037D4 RLA    ptr1                      0000A6 RLZ    
+_fp_string_to_float       001F17 RLA    _fp_sub                   0008B7 RLA    
+_main                     001D17 RLA    _memcpy                   0037A3 RLA    
+_tm1638_get_key_pressed   002D99 RLA    _tm1638_init              0026EC RLA    
+_tm1638_set_brightness    002CD8 RLA    _tm1638_show_text         002AA3 RLA    
+addysp                    0033CC RLA    addysp1                   0033CB RLA    
+aslax1                    0033E6 RLA    aslaxy                    003854 RLA    
+aulong                    0033DF RLA    axulong                   003400 RLA    
+booleq                    00377D RLA    boolge                    00378E RLA    
+boollt                    003786 RLA    boolne                    003777 RLA    
+callax                    003407 RLA    decax1                    00340E RLA    
+decaxy                    003415 RLA    decsp1                    00341E RLA    
+decsp2                    003427 RLA    decsp3                    003434 RLA    
+decsp4                    003441 RLA    decsp5                    00344E RLA    
+decsp6                    00345B RLA    getlop                    0036F5 RLA    
+incax1                    003496 RLA    incaxy                    00349F RLA    
+inceaxy                   00359A RLA    incsp1                    0034A8 RLA    
+incsp2                    0034B7 RLA    incsp3                    0034C5 RLA    
+incsp4                    0034CA RLA    incsp5                    0034CF RLA    
+incsp6                    0034D4 RLA    incsp8                    0034D9 RLA    
+jmpvec                    003C19 RLA    ldax0sp                   00354A RLA    
+ldaxi                     00353D RLA    ldaxysp                   00354C RLA    
+ldeax0sp                  003553 RLA    ldeaxysp                  003555 RLA    
+leaa0sp                   003582 RLA    mulax5                    0037DF RLA    
+negeax                    0035D7 RLA    popax                     0034AF RLA    
+popeax                    003619 RLA    poplsargs                 00364F RLA    
+popptr1                   0037F3 RLA    ptr1                      0000A6 RLZ    
 ptr2                      0000A8 RLZ    ptr3                      0000AA RLZ    
-ptr4                      0000AC RLZ    push0                     0037F8 RLA    
-pusha                     0037E6 RLA    pusha0                    0037FA RLA    
-pushax                    0037FC RLA    pusheax                   003618 RLA    
-pushl0                    00360F RLA    pushw0sp                  003812 RLA    
-pushwysp                  003814 RLA    regsave                   0000A2 RLZ    
-shleax1                   0033CF RLA    shreax1                   003861 RLA    
+ptr4                      0000AC RLZ    push0                     003817 RLA    
+pusha                     003805 RLA    pusha0                    003819 RLA    
+pushax                    00381B RLA    pusheax                   003637 RLA    
+pushl0                    00362E RLA    pushw0sp                  003831 RLA    
+pushwysp                  003833 RLA    regsave                   0000A2 RLZ    
+shleax1                   0033EE RLA    shreax1                   003880 RLA    
 sp                        00009E RLZ    sreg                      0000A0 RLZ    
-staspidx                  00386D RLA    stax0sp                   003883 RLA    
-staxysp                   003885 RLA    steax0sp                  00388E RLA    
-steaxysp                  003890 RLA    subysp                    0038B8 RLA    
+staspidx                  00388C RLA    stax0sp                   0038A2 RLA    
+staxysp                   0038A4 RLA    steax0sp                  0038AD RLA    
+steaxysp                  0038AF RLA    subysp                    0038D7 RLA    
 tmp1                      0000AE RLZ    tmp2                      0000AF RLZ    
 tmp3                      0000B0 RLZ    tmp4                      0000B1 RLZ    
-tosadda0                  003390 RLA    tosand0ax                 0034BF RLA    
-tosandeax                 0034C5 RLA    tosdiv0ax                 003547 RLA    
-toseqeax                  00356F RLA    tosgeeax                  003575 RLA    
-tosicmp0                  003449 RLA    toslcmp                   0034E3 RLA    
-toslteax                  00358C RLA    tosmod0ax                 003592 RLA    
-tosneeax                  0035B2 RLA    tosoreax                  0035DC RLA    
-tosshleax                 003682 RLA    tosshreax                 00369C RLA    
-tossuba0                  0038A3 RLA    tosudiv0ax                0036C5 RLA    
-tosumod0ax                00373F RLA    udiv32                    0036FA RLA    
-utsteax                   0036B6 RLA    
+tosadda0                  0033AF RLA    tosand0ax                 0034DE RLA    
+tosandeax                 0034E4 RLA    tosdiv0ax                 003566 RLA    
+toseqeax                  00358E RLA    tosgeeax                  003594 RLA    
+tosicmp0                  003468 RLA    toslcmp                   003502 RLA    
+toslteax                  0035AB RLA    tosmod0ax                 0035B1 RLA    
+tosneeax                  0035D1 RLA    tosoreax                  0035FB RLA    
+tosshleax                 0036A1 RLA    tosshreax                 0036BB RLA    
+tossuba0                  0038C2 RLA    tosudiv0ax                0036E4 RLA    
+tosumod0ax                00375E RLA    udiv32                    003719 RLA    
+utsteax                   0036D5 RLA    
 
 
 Exports list by value:
@@ -244,50 +244,50 @@ _fp_save_fac              000AC7 RLA    _fp_clear_fac             000AE8 RLA
 FSUB                      000B2C RLA    FADD                      000B43 RLA    
 FMULT                     000D04 RLA    FDIV                      000DEB RLA    
 STORE_FAC_AT_YX_ROUNDED   000EB0 RLA    QINT                      000F77 RLA    
-_main                     001CF8 RLA    _fp_string_to_float       001EF8 RLA    
-_fp_float_to_string       0020BE RLA    _tm1638_init              0026CD RLA    
-_tm1638_show_text         002A84 RLA    _tm1638_set_brightness    002CB9 RLA    
-_tm1638_get_key_pressed   002D7A RLA    tosadda0                  003390 RLA    
-addysp1                   0033AC RLA    addysp                    0033AD RLA    
-aulong                    0033C0 RLA    aslax1                    0033C7 RLA    
-shleax1                   0033CF RLA    axulong                   0033E1 RLA    
-callax                    0033E8 RLA    decax1                    0033EF RLA    
-decaxy                    0033F6 RLA    decsp1                    0033FF RLA    
-decsp2                    003408 RLA    decsp3                    003415 RLA    
-decsp4                    003422 RLA    decsp5                    00342F RLA    
-decsp6                    00343C RLA    tosicmp0                  003449 RLA    
-incax1                    003477 RLA    incaxy                    003480 RLA    
-incsp1                    003489 RLA    popax                     003490 RLA    
-incsp2                    003498 RLA    incsp3                    0034A6 RLA    
-incsp4                    0034AB RLA    incsp5                    0034B0 RLA    
-incsp6                    0034B5 RLA    incsp8                    0034BA RLA    
-tosand0ax                 0034BF RLA    tosandeax                 0034C5 RLA    
-toslcmp                   0034E3 RLA    ldaxi                     00351E RLA    
-ldax0sp                   00352B RLA    ldaxysp                   00352D RLA    
-ldeax0sp                  003534 RLA    ldeaxysp                  003536 RLA    
-tosdiv0ax                 003547 RLA    leaa0sp                   003563 RLA    
-toseqeax                  00356F RLA    tosgeeax                  003575 RLA    
-inceaxy                   00357B RLA    toslteax                  00358C RLA    
-tosmod0ax                 003592 RLA    tosneeax                  0035B2 RLA    
-negeax                    0035B8 RLA    tosoreax                  0035DC RLA    
-popeax                    0035FA RLA    pushl0                    00360F RLA    
-pusheax                   003618 RLA    poplsargs                 003630 RLA    
-tosshleax                 003682 RLA    tosshreax                 00369C RLA    
-utsteax                   0036B6 RLA    tosudiv0ax                0036C5 RLA    
-getlop                    0036D6 RLA    udiv32                    0036FA RLA    
-tosumod0ax                00373F RLA    boolne                    003758 RLA    
-booleq                    00375E RLA    boollt                    003767 RLA    
-boolge                    00376F RLA    _memcpy                   003784 RLA    
-mulax5                    0037C0 RLA    popptr1                   0037D4 RLA    
-pusha                     0037E6 RLA    push0                     0037F8 RLA    
-pusha0                    0037FA RLA    pushax                    0037FC RLA    
-pushw0sp                  003812 RLA    pushwysp                  003814 RLA    
-aslaxy                    003835 RLA    shreax1                   003861 RLA    
-staspidx                  00386D RLA    stax0sp                   003883 RLA    
-staxysp                   003885 RLA    steax0sp                  00388E RLA    
-steaxysp                  003890 RLA    tossuba0                  0038A3 RLA    
-subysp                    0038B8 RLA    jmpvec                    003BFA RLA    
-__BSS_RUN__               003BFD RLA    
+_main                     001D17 RLA    _fp_string_to_float       001F17 RLA    
+_fp_float_to_string       0020DD RLA    _tm1638_init              0026EC RLA    
+_tm1638_show_text         002AA3 RLA    _tm1638_set_brightness    002CD8 RLA    
+_tm1638_get_key_pressed   002D99 RLA    tosadda0                  0033AF RLA    
+addysp1                   0033CB RLA    addysp                    0033CC RLA    
+aulong                    0033DF RLA    aslax1                    0033E6 RLA    
+shleax1                   0033EE RLA    axulong                   003400 RLA    
+callax                    003407 RLA    decax1                    00340E RLA    
+decaxy                    003415 RLA    decsp1                    00341E RLA    
+decsp2                    003427 RLA    decsp3                    003434 RLA    
+decsp4                    003441 RLA    decsp5                    00344E RLA    
+decsp6                    00345B RLA    tosicmp0                  003468 RLA    
+incax1                    003496 RLA    incaxy                    00349F RLA    
+incsp1                    0034A8 RLA    popax                     0034AF RLA    
+incsp2                    0034B7 RLA    incsp3                    0034C5 RLA    
+incsp4                    0034CA RLA    incsp5                    0034CF RLA    
+incsp6                    0034D4 RLA    incsp8                    0034D9 RLA    
+tosand0ax                 0034DE RLA    tosandeax                 0034E4 RLA    
+toslcmp                   003502 RLA    ldaxi                     00353D RLA    
+ldax0sp                   00354A RLA    ldaxysp                   00354C RLA    
+ldeax0sp                  003553 RLA    ldeaxysp                  003555 RLA    
+tosdiv0ax                 003566 RLA    leaa0sp                   003582 RLA    
+toseqeax                  00358E RLA    tosgeeax                  003594 RLA    
+inceaxy                   00359A RLA    toslteax                  0035AB RLA    
+tosmod0ax                 0035B1 RLA    tosneeax                  0035D1 RLA    
+negeax                    0035D7 RLA    tosoreax                  0035FB RLA    
+popeax                    003619 RLA    pushl0                    00362E RLA    
+pusheax                   003637 RLA    poplsargs                 00364F RLA    
+tosshleax                 0036A1 RLA    tosshreax                 0036BB RLA    
+utsteax                   0036D5 RLA    tosudiv0ax                0036E4 RLA    
+getlop                    0036F5 RLA    udiv32                    003719 RLA    
+tosumod0ax                00375E RLA    boolne                    003777 RLA    
+booleq                    00377D RLA    boollt                    003786 RLA    
+boolge                    00378E RLA    _memcpy                   0037A3 RLA    
+mulax5                    0037DF RLA    popptr1                   0037F3 RLA    
+pusha                     003805 RLA    push0                     003817 RLA    
+pusha0                    003819 RLA    pushax                    00381B RLA    
+pushw0sp                  003831 RLA    pushwysp                  003833 RLA    
+aslaxy                    003854 RLA    shreax1                   003880 RLA    
+staspidx                  00388C RLA    stax0sp                   0038A2 RLA    
+staxysp                   0038A4 RLA    steax0sp                  0038AD RLA    
+steaxysp                  0038AF RLA    tossuba0                  0038C2 RLA    
+subysp                    0038D7 RLA    jmpvec                    003C19 RLA    
+__BSS_RUN__               003C1C RLA    
 
 
 Imports list:
@@ -345,8 +345,8 @@ _main (main.o):
 _memcpy (memcpy.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 _tm1638_get_key_pressed (tm1638.o):
     main.o                    src\main.s(25)
 _tm1638_init (tm1638.o):
@@ -369,16 +369,16 @@ addysp (addysp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 addysp1 (addysp.o):
     sub.o                     runtime/sub.s(8)
     ludiv.o                   runtime/ludiv.s(9)
     lor.o                     runtime/lor.s(9)
     land.o                    runtime/land.s(9)
 aslax1 (aslax1.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 aslaxy (shl.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
 aulong (along.o):
@@ -389,7 +389,7 @@ axulong (axlong.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
 booleq (makebool.o):
     leq.o                     runtime/leq.s(8)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 boolge (makebool.o):
     lge.o                     runtime/lge.s(8)
 boollt (makebool.o):
@@ -398,13 +398,13 @@ boolne (makebool.o):
     lne.o                     runtime/lne.s(8)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
 callax (call.o):
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 decax1 (decax1.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 decaxy (decaxy.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
@@ -418,11 +418,11 @@ decsp1 (decsp1.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 decsp2 (decsp2.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -431,7 +431,7 @@ decsp3 (decsp3.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
 decsp4 (decsp4.o):
     lpush.o                   runtime/lpush.s(12)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 decsp5 (decsp5.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
@@ -442,8 +442,8 @@ getlop (ludiv.o):
     lumod.o                   runtime/lumod.s(9)
     lshelp.o                  runtime/lshelp.s(11)
 incax1 (incax1.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 incaxy (incaxy.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -456,12 +456,12 @@ incsp1 (incsp1.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 incsp2 (incsp2.o):
     staspidx.o                runtime/staspidx.s(8)
     popptr1.o                 runtime/popptr1.s(8)
@@ -469,17 +469,17 @@ incsp2 (incsp2.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 incsp3 (incsp3.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 incsp4 (incsp4.o):
     lpop.o                    runtime/lpop.s(9)
     lcmp.o                    runtime/lcmp.s(9)
@@ -489,12 +489,12 @@ incsp4 (incsp4.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 incsp5 (incsp5.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 incsp6 (incsp6.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
@@ -502,18 +502,18 @@ incsp8 (incsp8.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
 jmpvec (jmpvec.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 ldax0sp (ldaxsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 ldaxi (ldaxi.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 ldaxysp (ldaxsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -524,12 +524,12 @@ ldaxysp (ldaxsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 ldeax0sp (ldeaxysp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -547,9 +547,9 @@ leaa0sp (leaaxsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 mulax5 (mulax5.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
@@ -596,7 +596,7 @@ ptr4 (zeropage.o):
     lshelp.o                  runtime/lshelp.s(12)
     linc.o                    runtime/linc.s(8)
 push0 (pushax.o):
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 pusha (pusha.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -611,14 +611,14 @@ pusha (pusha.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 pusha0 (pushax.o):
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 pushax (pushax.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -635,22 +635,22 @@ pushax (pushax.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 pusheax (lpush.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -661,7 +661,7 @@ pusheax (lpush.o):
 pushl0 (lpush.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
 pushw0sp (pushwsp.o):
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 pushwysp (pushwsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
@@ -670,7 +670,7 @@ pushwysp (pushwsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 regsave (zeropage.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(10)
     main.o                    src\main.s(10)
@@ -745,16 +745,16 @@ staspidx (staspidx.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 stax0sp (staxsp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 staxysp (staxsp.o):
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
 steax0sp (steaxsp.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
 steaxysp (steaxsp.o):
@@ -768,8 +768,8 @@ subysp (subysp.o):
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     tm1638.o                  ../../libs/tm1638-6502-cc65/src/tm1638.s(2120)
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 tmp1 (zeropage.o):
     staspidx.o                runtime/staspidx.s(9)
     shreax1.o                 runtime/shreax1.s(8)
@@ -816,8 +816,8 @@ toseqeax (leq.o):
 tosgeeax (lge.o):
     float_convert.o           libs/msbasic-float\src\float_convert.s(1034)
 tosicmp0 (icmp.o):
-    main.o                    src\main.s(1887)
-    main.o                    src\main.s(1887)
+    main.o                    src\main.s(1900)
+    main.o                    src\main.s(1900)
 toslcmp (lcmp.o):
     lne.o                     runtime/lne.s(8)
     llt.o                     runtime/llt.s(8)

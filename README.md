@@ -47,8 +47,8 @@ El TM1638 es especialmente popular en calculadoras digitales, cronómetros y pan
 
 - **.**: Punto decimal (permite ingresar números con decimales)
 - **=**: Igual (ejecuta la operación). Presionar repetidamente repite la última operación
-- **Presión larga de [.]** (1 segundo): Clear - reinicia la calculadora
-- **Presión larga de [-]** (1 segundo): Cambia el signo del número actual (+/-)
+- **Presión larga de [.]** (500ms): Clear - reinicia la calculadora
+- **Presión larga de [-]** (500ms): Cambia el signo del número actual (+/-)
 - **DIV/0**: Se muestra en el display si se intenta dividir por cero
 
 ## Ejemplos de Operaciones
@@ -172,10 +172,10 @@ La calculadora funciona como una calculadora estándar:
 5. **Presionar =** nuevamente para repetir la última operación con el nuevo resultado
 
 ### Clear (Limpiar)
-Mantener presionada la tecla [.] por 1 segundo para reiniciar la calculadora.
+Mantener presionada la tecla [.] por 500ms para reiniciar la calculadora.
 
 ### Cambiar Signo (+/-)
-Mantener presionada la tecla [-] por 1 segundo para cambiar el signo del número actual.
+Mantener presionada la tecla [-] por 500ms para cambiar el signo del número actual.
 Presión corta de [-] sigue siendo el operador resta.
 
 ### Salir (Quit)
