@@ -11,15 +11,15 @@ msbasic_float_only.o:
     ZEROPAGE          Offs=000006  Size=000078  Align=00001  Fill=0000
 main.o:
     CODE              Offs=000AE4  Size=000BEC  Align=00001  Fill=0000
-    RODATA            Offs=000000  Size=00024E  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000250  Align=00001  Fill=0000
     BSS               Offs=000005  Size=000046  Align=00001  Fill=0000
     DATA              Offs=000000  Size=00000B  Align=00001  Fill=0000
 float_convert.o:
     CODE              Offs=0016D0  Size=0007AF  Align=00001  Fill=0000
-    RODATA            Offs=00024E  Size=000041  Align=00001  Fill=0000
+    RODATA            Offs=000250  Size=000041  Align=00001  Fill=0000
 tm1638.o:
     CODE              Offs=001E7F  Size=000CE9  Align=00001  Fill=0000
-    RODATA            Offs=00028F  Size=00009A  Align=00001  Fill=0000
+    RODATA            Offs=000291  Size=00009A  Align=00001  Fill=0000
     BSS               Offs=00004B  Size=000001  Align=00001  Fill=0000
     DATA              Offs=00000B  Size=000001  Align=00001  Fill=0000
 D:\cc65\lib\none.lib(add.o):
@@ -159,9 +159,9 @@ Name                   Start     End    Size  Align
 ZEROPAGE              000020  0000B7  000098  00001
 STARTUP               000800  000846  000047  00001
 CODE                  000847  0038E3  00309D  00001
-RODATA                0038E4  003C0C  000329  00001
-DATA                  003C0D  003C1B  00000F  00001
-BSS                   003C1C  003C67  00004C  00001
+RODATA                0038E4  003C0E  00032B  00001
+DATA                  003C0F  003C1D  00000F  00001
+BSS                   003C1E  003C69  00004C  00001
 
 
 Exports list by name:
@@ -171,7 +171,7 @@ FAC                       0000CB RLZ    FACEXTENSION              0000DA REZ
 FACSIGN                   0000D0 RLZ    FADD                      000B43 RLA    
 FDIV                      000DEB RLA    FMULT                     000D04 RLA    
 FSUB                      000B2C RLA    QINT                      000F77 RLA    
-STORE_FAC_AT_YX_ROUNDED   000EB0 RLA    __BSS_RUN__               003C1C RLA    
+STORE_FAC_AT_YX_ROUNDED   000EB0 RLA    __BSS_RUN__               003C1E RLA    
 __BSS_SIZE__              00004C REA    __STARTUP__               000001 REA    
 _fp_add                   000847 RLA    _fp_clear_fac             000AE8 RLA    
 _fp_div                   000997 RLA    _fp_float_to_string       0020DD RLA    
@@ -195,7 +195,7 @@ inceaxy                   00359A RLA    incsp1                    0034A8 RLA
 incsp2                    0034B7 RLA    incsp3                    0034C5 RLA    
 incsp4                    0034CA RLA    incsp5                    0034CF RLA    
 incsp6                    0034D4 RLA    incsp8                    0034D9 RLA    
-jmpvec                    003C19 RLA    ldax0sp                   00354A RLA    
+jmpvec                    003C1B RLA    ldax0sp                   00354A RLA    
 ldaxi                     00353D RLA    ldaxysp                   00354C RLA    
 ldeax0sp                  003553 RLA    ldeaxysp                  003555 RLA    
 leaa0sp                   003582 RLA    mulax5                    0037DF RLA    
@@ -286,8 +286,8 @@ aslaxy                    003854 RLA    shreax1                   003880 RLA
 staspidx                  00388C RLA    stax0sp                   0038A2 RLA    
 staxysp                   0038A4 RLA    steax0sp                  0038AD RLA    
 steaxysp                  0038AF RLA    tossuba0                  0038C2 RLA    
-subysp                    0038D7 RLA    jmpvec                    003C19 RLA    
-__BSS_RUN__               003C1C RLA    
+subysp                    0038D7 RLA    jmpvec                    003C1B RLA    
+__BSS_RUN__               003C1E RLA    
 
 
 Imports list:

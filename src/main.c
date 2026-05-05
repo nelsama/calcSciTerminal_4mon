@@ -677,9 +677,10 @@ int main(void) {
                 }
                 /* Si es rebote (hold_result == 2), ignorar */
                 
-                /* La tecla ya se soltó, resetear last_key para aceptar la siguiente */
-                last_key = 0;
-                key_processed = 0;
+                /* La tecla ya se soltó. Marcamos key=0 para que no se reprocese
+                 * en esta misma iteración. Los flags se resetearán en el else
+                 * cuando no haya tecla presionada. */
+                key = 0;
                 
             } else if (!key_processed) {
                 /* Teclas normales (dígitos y operadores +, *, /, =) */
