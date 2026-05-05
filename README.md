@@ -48,6 +48,7 @@ El TM1638 es especialmente popular en calculadoras digitales, cronómetros y pan
 - **.**: Punto decimal (permite ingresar números con decimales)
 - **=**: Igual (ejecuta la operación). Presionar repetidamente repite la última operación
 - **Presión larga de [.]** (1 segundo): Clear - reinicia la calculadora
+- **Presión larga de [-]** (1 segundo): Cambia el signo del número actual (+/-)
 - **DIV/0**: Se muestra en el display si se intenta dividir por cero
 
 ## Ejemplos de Operaciones
@@ -172,6 +173,10 @@ La calculadora funciona como una calculadora estándar:
 
 ### Clear (Limpiar)
 Mantener presionada la tecla [.] por 1 segundo para reiniciar la calculadora.
+
+### Cambiar Signo (+/-)
+Mantener presionada la tecla [-] por 1 segundo para cambiar el signo del número actual.
+Presión corta de [-] sigue siendo el operador resta.
 
 ### Salir (Quit)
 En la terminal UART, escriba `quit` (o solo `q`) y presione Enter para volver al monitor 6502. Al salir, el display TM1638 se apaga automáticamente.

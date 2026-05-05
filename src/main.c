@@ -11,7 +11,10 @@
  *   [7] [8] [9] [*]           [ 9] [10] [11] [12]
  *   [.] [0] [=] [/]           [13] [14] [15] [16]
  * 
- * Nota: Mantener presionado [.] (tecla 13) por 1 segundo hace Clear (C)
+ * Nota: 
+ *   Mantener presionado [.] (tecla 13) por 1 segundo = Clear (C)
+ *   Mantener presionado [-] (tecla 8) por 1 segundo = Cambiar signo (+/-)
+ *   Presionar [-] rapidamente = operador resta
  * 
  * UART:
  *   Escriba "quit" o "q" + Enter para volver al monitor 6502.
@@ -46,15 +49,19 @@
 #define MAX_INPUT_LEN   12      /* Máximo número de dígitos en entrada */
 #define KEY_DEBOUNCE_MS 150     /* Tiempo de anti-rebote */
 #define LONG_PRESS_MS   1000    /* Tiempo para presión larga (1 segundo) */
-#define SHORT_PRESS_MS  100     /* Tiempo mínimo para detectar punto (100ms) */
+#define SHORT_PRESS_MS  100     /* Tiempo mínimo para detectar presión corta (100ms) */
 #define UART_BUF_LEN    16      /* Buffer para comandos UART */
 
 /* Versión del programa */
 #define VERSION_MAJOR   1
-#define VERSION_MINOR   3
+#define VERSION_MINOR   4
 #define VERSION_PATCH   0
-#define VERSION_STR     "1.3.0"      /* Para UART */
-#define VERSION_DISPLAY "CAL  1.3"   /* Para TM1638 (8 chars max) */
+#define VERSION_STR     "1.4.0"      /* Para UART */
+#define VERSION_DISPLAY "CAL  1.4"   /* Para TM1638 (8 chars max) */
+
+/* IDs de teclas del TM1638 */
+#define KEY_DOT     13
+#define KEY_MINUS   8
 
 /* Estados de la calculadora */
 typedef enum {
@@ -123,7 +130,7 @@ void clear_input(void) {
     decimal_entered = 0;
 }
 
-/* Convertir float a string para UART (usa un buffer interno estático) */
+/* Convertir float a string para UART */
 void float_to_str(const msbasic_float_t *value, char *buf, uint8_t maxlen) {
     fp_float_to_string(value, buf, maxlen);
 }
@@ -160,6 +167,41 @@ void update_display(void) {
     tm1638_show_text(display);
 }
 
+/* Verificar si el buffer actual tiene signo negativo */
+uint8_t is_negative(void) {
+    return (input_len > 0 && input_buffer[0] == '-');
+}
+
+/* Cambiar signo del número actual (+/-) */
+void toggle_sign(void) {
+    uint8_t i;
+    
+    /* Si estamos mostrando resultado o hay un cero, no hacemos nada */
+    if (state == STATE_RESULT) return;
+    
+    /* Si el buffer es "0" (y solo "0"), no cambiar signo */
+    if (input_len == 1 && input_buffer[0] == '0') return;
+    
+    if (is_negative()) {
+        /* Quitar signo negativo: mover todo un lugar a la izquierda */
+        for (i = 1; i <= input_len; i++) {
+            input_buffer[i - 1] = input_buffer[i];
+        }
+        input_len--;
+    } else {
+        /* Agregar signo negativo: mover todo un lugar a la derecha */
+        if (input_len < MAX_INPUT_LEN) {
+            for (i = input_len; i > 0; i--) {
+                input_buffer[i] = input_buffer[i - 1];
+            }
+            input_buffer[0] = '-';
+            input_len++;
+            input_buffer[input_len] = '\0';
+        }
+    }
+    update_display();
+}
+
 /* Agregar dígito al buffer */
 void add_digit(char digit) {
     /* Si estamos mostrando resultado, limpiar e iniciar nuevo número */
@@ -170,9 +212,13 @@ void add_digit(char digit) {
     }
     
     if (input_len < MAX_INPUT_LEN) {
-        /* Remover '0' inicial si es el primer dígito */
-        if (input_len == 1 && input_buffer[0] == '0' && !decimal_entered) {
+        /* Remover '0' inicial si es el primer dígito (solo si no hay signo -) */
+        if (!is_negative() && input_len == 1 && input_buffer[0] == '0' && !decimal_entered) {
             input_len = 0;
+        }
+        /* Con signo negativo: " -0" -> remover el 0 */
+        if (is_negative() && input_len == 2 && input_buffer[1] == '0' && !decimal_entered) {
+            input_len = 1;  /* Deja solo el '-' */
         }
         
         input_buffer[input_len++] = digit;
@@ -192,6 +238,9 @@ void add_decimal(void) {
     
     if (!decimal_entered && input_len < MAX_INPUT_LEN) {
         if (input_len == 0) {
+            input_buffer[input_len++] = '0';
+        } else if (input_len == 1 && input_buffer[0] == '-') {
+            /* Si solo tenemos el signo negativo, agregar "0" antes del punto */
             input_buffer[input_len++] = '0';
         }
         input_buffer[input_len++] = '.';
@@ -377,7 +426,7 @@ void uart_save_result_as_op1(void) {
     uart_op1_str[MAX_INPUT_LEN] = '\0';
 }
 
-/* Procesar tecla presionada del TM1638 */
+/* Procesar tecla presionada del TM1638 (solo presión corta) */
 void process_key(uint8_t key) {
     /* Mapeo de teclas según el layout deseado:
      * Hardware QYF-TM1638:     Layout deseado:
@@ -385,6 +434,10 @@ void process_key(uint8_t key) {
      *  [ 5] [ 6] [ 7] [ 8]     [4] [5] [6] [-]
      *  [ 9] [10] [11] [12]     [7] [8] [9] [*]
      *  [13] [14] [15] [16]     [.] [0] [=] [/]
+     * 
+     * Nota: Las teclas 8 (-) y 13 (.) se procesan en el loop principal
+     *       para distinguir presión corta de presión larga.
+     *       Aquí solo llegan cuando ya se determinó que fue presión corta.
      */
     
     switch (key) {
@@ -399,11 +452,11 @@ void process_key(uint8_t key) {
         case 11: add_digit('9'); break;
         case 14: add_digit('0'); break;
         
-        case 13: /* Tecla . (Punto decimal) */
+        case 13: /* Tecla . (Punto decimal) - presión corta */
             add_decimal();
             break;
         
-        case 4: /* Tecla + */
+        case 8: /* Tecla - (Resta) - presión corta */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
                 uart_save_operand_str(uart_op1_str);
@@ -412,21 +465,21 @@ void process_key(uint8_t key) {
                  * input_buffer tiene el string visible. Lo guardamos como op1_str. */
                 uart_save_result_as_op1();
             }
-            current_op = OP_ADD;
-            last_op = OP_ADD;
+            current_op = OP_SUB;
+            last_op = OP_SUB;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
         
-        case 8: /* Tecla - */
+        case 4: /* Tecla + */
             if (state == STATE_FIRST_NUMBER) {
                 save_current_input(&operand1);
                 uart_save_operand_str(uart_op1_str);
             } else if (state == STATE_RESULT) {
                 uart_save_result_as_op1();
             }
-            current_op = OP_SUB;
-            last_op = OP_SUB;
+            current_op = OP_ADD;
+            last_op = OP_ADD;
             clear_input();
             state = STATE_SECOND_NUMBER;
             break;
@@ -488,12 +541,34 @@ void process_key(uint8_t key) {
     }
 }
 
+/* Esperar a que se suelte una tecla, midiendo el tiempo de presión */
+/* Retorna: 0 = presión corta, 1 = presión larga (>= LONG_PRESS_MS) */
+uint8_t wait_key_release_with_timeout(uint8_t expected_key, uint16_t *hold_count_out) {
+    uint16_t count = 0;
+    while (tm1638_get_key_pressed() == expected_key) {
+        rom_delay_ms(10);
+        count++;
+        
+        /* Si pasó LONG_PRESS_MS (100 * 10ms = 1000ms) */
+        if (count >= 100) {
+            *hold_count_out = count;
+            return 1;  /* Presión larga */
+        }
+    }
+    *hold_count_out = count;
+    /* Si se soltó antes de 50ms, es rebote */
+    if (count < 5) return 2;  /* Rebote */
+    return 0;  /* Presión corta */
+}
+
 /* ============================================================================
  * MAIN
  * ============================================================================ */
 
 int main(void) {
     uint8_t key;
+    uint16_t hold_count;
+    uint8_t hold_result;
     
     /* Banner por UART */
     uart_print("\r\n");
@@ -510,6 +585,7 @@ int main(void) {
     uart_print("  [7] [8] [9] [*]\r\n");
     uart_print("  [.] [0] [=] [/]\r\n");
     uart_print("Mantener [.] 1seg = Clear\r\n");
+    uart_print("Mantener [-] 1seg = Cambiar signo (+/-)\r\n");
     uart_print("Escriba 'quit' o 'q' + Enter para salir\r\n\r\n");
     uart_print("-- Inicio de sesion --\r\n");
     
@@ -556,36 +632,50 @@ int main(void) {
             if (key != last_key) {
                 last_key = key;
                 key_processed = 0;
-                
-                /* Procesar inmediatamente teclas que no son el punto */
-                if (key != 13) {
-                    process_key(key);
-                    key_processed = 1;
-                }
             }
-            /* Si es el punto y sigue presionado */
-            else if (key == 13 && !key_processed) {
-                uint16_t dot_hold_count;
+            
+            /* Si es una tecla con doble función (presión larga vs corta) */
+            if (!key_processed && (key == KEY_DOT || key == KEY_MINUS)) {
+                /* Esperar a que se suelte para medir el tiempo */
+                hold_result = wait_key_release_with_timeout(key, &hold_count);
                 
-                /* Contar tiempo de presión */
-                dot_hold_count = 0;
-                while (tm1638_get_key_pressed() == 13) {
-                    rom_delay_ms(10);
-                    dot_hold_count++;
-                    
-                    /* Si pasó 1 segundo (100 * 10ms), hacer Clear */
-                    if (dot_hold_count >= 100) {
-                        do_clear();
-                        key_processed = 2;
-                        break;
+                if (hold_result == 0) {
+                    /* Presión corta */
+                    if (key == KEY_DOT) {
+                        add_decimal();
+                    } else { /* KEY_MINUS */
+                        /* Presión corta de -: operador resta */
+                        if (state == STATE_FIRST_NUMBER) {
+                            save_current_input(&operand1);
+                            uart_save_operand_str(uart_op1_str);
+                        } else if (state == STATE_RESULT) {
+                            uart_save_result_as_op1();
+                        }
+                        current_op = OP_SUB;
+                        last_op = OP_SUB;
+                        clear_input();
+                        state = STATE_SECOND_NUMBER;
                     }
-                }
-                
-                /* Si soltó antes de 1 segundo, agregar punto */
-                if (key_processed != 2 && dot_hold_count >= 5) {
-                    process_key(13);  /* Agregar punto decimal */
                     key_processed = 1;
+                } else if (hold_result == 1) {
+                    /* Presión larga */
+                    if (key == KEY_DOT) {
+                        do_clear();
+                    } else { /* KEY_MINUS */
+                        toggle_sign();
+                    }
+                    key_processed = 2;
                 }
+                /* Si es rebote (hold_result == 2), ignorar */
+                
+                /* La tecla ya se soltó, resetear last_key para aceptar la siguiente */
+                last_key = 0;
+                key_processed = 0;
+                
+            } else if (!key_processed) {
+                /* Teclas normales (dígitos y operadores +, *, /, =) */
+                process_key(key);
+                key_processed = 1;
             }
             
         } else {

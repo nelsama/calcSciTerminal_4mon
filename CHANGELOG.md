@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto.
 
+## [1.4.0] - 2026-01-19
+
+### Agregado
+- **Cambio de signo (+/-)**: Mantener presionada la tecla `-` (tecla 8) por 1 segundo cambia el signo del número actual. Presión corta sigue siendo el operador resta
+- **Función `wait_key_release_with_timeout()`**: Refactorizada la detección de presión larga/corta para las teclas `.` y `-` en una función reutilizable
+- **Funciones `toggle_sign()` e `is_negative()`**: Para gestionar el signo negativo en el buffer de entrada
+- **Ajuste en `add_digit()` y `add_decimal()`**: Ahora consideran correctamente el signo `-` al inicio del buffer
+
+### Versión
+- Actualizada a v1.4.0
+
 ## [1.3.0] - 2026-01-19
 
 ### Agregado
