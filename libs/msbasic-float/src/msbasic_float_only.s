@@ -56,7 +56,7 @@ GENERIC_CHRGOT2 = $7C
 GENERIC_RNDSEED = $7D
 
 ; ===============================================================================
-; GIVAYF - Convierte entero de 16 bits (Y,A) a float en FAC  
+; GIVAYF - Convierte entero de 16 bits (Y,A) a float en FAC
 ; ===============================================================================
 .export GIVAYF
 GIVAYF:
@@ -89,7 +89,22 @@ GIVAYF:
 ; Exportar símbolos públicos de float.s y zeropage.s
 ; ===============================================================================
 .export FADD, FSUB, FMULT, FDIV
+.export FADDH, FSUBT
+.export DIV
+.export INT, NEGOP
 .export QINT
+.export POLYNOMIAL_ODD
+.export COPY_FAC_TO_ARG_ROUNDED
+.export STORE_FAC_IN_TEMP1_ROUNDED
 .export STORE_FAC_AT_YX_ROUNDED  ; Para guardar FAC en formato correcto
+.export LOAD_FAC_FROM_YA
+.export FPWRT
+.export ABS, SGN
+.export LOG, EXP, SQR
 .export FAC, ARG, FACSIGN, ARGSIGN
 .export FACEXTENSION, ARGEXTENSION
+
+; Exportar ZP adicionales para trig.s
+.exportzp CPRMASK
+.exportzp STRNG1, STRNG2
+.exportzp TEMP1, TEMP3

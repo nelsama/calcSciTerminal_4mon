@@ -49,15 +49,14 @@ typedef struct {
 } msbasic_float_t;
 
 /* ============================================================================
- * CONSTANTES ÚTILES (definir en tu código)
- * ============================================================================
- * 
- * const msbasic_float_t FP_ZERO = {{0x00, 0x00, 0x00, 0x00, 0x00}};
- * const msbasic_float_t FP_ONE  = {{0x81, 0x00, 0x00, 0x00, 0x00}};
- * const msbasic_float_t FP_TWO  = {{0x82, 0x00, 0x00, 0x00, 0x00}};
- * const msbasic_float_t FP_TEN  = {{0x84, 0x20, 0x00, 0x00, 0x00}};
- * const msbasic_float_t FP_HALF = {{0x80, 0x00, 0x00, 0x00, 0x00}};
- */
+ * CONSTANTES ÚTILES
+ * ============================================================================ */
+#define FP_ZERO {{0x00, 0x00, 0x00, 0x00, 0x00}}
+#define FP_ONE  {{0x81, 0x00, 0x00, 0x00, 0x00}}
+#define FP_TWO  {{0x82, 0x00, 0x00, 0x00, 0x00}}
+#define FP_TEN  {{0x84, 0x20, 0x00, 0x00, 0x00}}
+#define FP_HALF {{0x80, 0x00, 0x00, 0x00, 0x00}}
+#define FP_PI   {{0x82, 0x49, 0x0F, 0xDA, 0xA2}}
 
 /* ============================================================================
  * OPERACIONES ARITMÉTICAS
@@ -191,5 +190,88 @@ void fp_clear_fac(void);
  * Útil para verificar que las rutinas MSBasic funcionan
  */
 void fp_test_direct(void);
+
+/* ============================================================================
+ * FUNCIONES TRIGONOMÉTRICAS (radianes)
+ * ============================================================================ */
+
+/**
+ * Seno: result = sin(x)
+ * @param x      Ángulo en radianes
+ * @param result Resultado
+ */
+void fp_sin(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Coseno: result = cos(x)
+ * @param x      Ángulo en radianes
+ * @param result Resultado
+ */
+void fp_cos(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Tangente: result = tan(x)
+ * @param x      Ángulo en radianes
+ * @param result Resultado
+ */
+void fp_tan(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Arcotangente: result = atan(x)
+ * @param x      Valor
+ * @param result Resultado en radianes
+ */
+void fp_atn(const msbasic_float_t *x, msbasic_float_t *result);
+
+/* ============================================================================
+ * FUNCIONES EXPONENCIALES Y LOGARITMO
+ * ============================================================================ */
+
+/**
+ * Logaritmo natural: result = ln(x)
+ * @param x      Valor (debe ser > 0)
+ * @param result Resultado
+ */
+void fp_log(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Exponencial: result = e^x
+ * @param x      Exponente
+ * @param result Resultado
+ */
+void fp_exp(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Potencia: result = a ^ b
+ * @param a      Base
+ * @param b      Exponente
+ * @param result Resultado
+ */
+void fp_pow(const msbasic_float_t *a, const msbasic_float_t *b, msbasic_float_t *result);
+
+/* ============================================================================
+ * OTRAS FUNCIONES MATEMÁTICAS
+ * ============================================================================ */
+
+/**
+ * Raíz cuadrada: result = sqrt(x)
+ * @param x      Valor (debe ser >= 0)
+ * @param result Resultado
+ */
+void fp_sqr(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Valor absoluto: result = abs(x)
+ * @param x      Valor
+ * @param result Resultado
+ */
+void fp_abs(const msbasic_float_t *x, msbasic_float_t *result);
+
+/**
+ * Parte entera (floor): result = floor(x)
+ * @param x      Valor
+ * @param result Resultado (mayor entero <= x)
+ */
+void fp_int(const msbasic_float_t *x, msbasic_float_t *result);
 
 #endif /* MSBASIC_FLOAT_H */

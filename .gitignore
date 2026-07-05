@@ -1,0 +1,15 @@
+# Archivos compilados
+build/
+output/
+*.o
+*.bin
+*.map
+
+# Directorios de herramientas
+.cc65/
+.clangd/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

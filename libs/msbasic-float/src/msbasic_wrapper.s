@@ -2,7 +2,7 @@
 ; msbasic_wrapper.s - Wrapper para usar rutinas de punto flotante de MSBasic
 ; ==============================================================================
 ; Proporciona una interfaz simple entre C y las rutinas de MSBasic.
-; 
+;
 ; MSBasic usa dos registros principales:
 ;   - FAC (Floating Point Accumulator): 5 bytes en Zero Page ($CB-$CF)
 ;   - ARG (Argument Register): 5 bytes en Zero Page ($D1-$D5)
@@ -94,7 +94,7 @@ _fp_test_direct:
         sta     FACEXTENSION
         sta     ARGSIGN
         sta     ARGEXTENSION
-        
+
         ; Cargar valor 2 en FAC con formato CORRECTO (bit 7 explícito)
         ; Valor 2 = exp 0x82, mantisa 0x80 (bit implícito ahora explícito)
         lda     #$82
@@ -105,7 +105,7 @@ _fp_test_direct:
         sta     FAC+2
         sta     FAC+3
         sta     FAC+4
-        
+
         ; Cargar valor 2 en test_val2 (formato almacenamiento SIN bit explícito)
         ; FADD espera el segundo operando en formato almacenamiento
         lda     #$82
@@ -115,7 +115,7 @@ _fp_test_direct:
         sta     test_val2+2
         sta     test_val2+3
         sta     test_val2+4
-        
+
         ; Debug: Mostrar FAC antes de FADD
         lda     #'A'
         jsr     UART_PUTC
@@ -124,12 +124,12 @@ _fp_test_direct:
         lda     FAC+1
         jsr     debug_hex
         jsr     debug_newline
-        
+
         ; Llamar FADD: FAC = FAC + test_val2 (2+2=4)
         lda     #<test_val2
         ldy     #>test_val2
         jsr     FADD
-        
+
         ; Debug: Mostrar FAC después de FADD
         lda     #'R'
         jsr     UART_PUTC
@@ -140,7 +140,7 @@ _fp_test_direct:
         lda     FAC+2
         jsr     debug_hex
         jsr     debug_newline
-        
+
         rts
 
 ; Valor temporal para test
@@ -162,20 +162,20 @@ _fp_add:
         ; CC65 pasa: A/X = result (último), pop = b, pop = a
         sta     result_ptr_zp
         stx     result_ptr_zp+1
-        
+
         jsr     popax
         sta     b_ptr_zp
         stx     b_ptr_zp+1
-        
+
         jsr     popax
         sta     a_ptr_zp
         stx     a_ptr_zp+1
-        
+
         ; Limpiar extensiones
         lda     #0
         sta     FACEXTENSION
         sta     ARGEXTENSION
-        
+
         ; Copiar 'a' a FAC extrayendo signo de bit 7 de byte[1]
         ldy     #0
         lda     (a_ptr_zp),y    ; Exponente
@@ -203,7 +203,7 @@ _fp_add:
         iny
         lda     (a_ptr_zp),y
         sta     FAC+4
-        
+
         ; Copiar 'b' a temp_operand (formato almacenamiento, sin modificar)
         ; FADD llamará a LOAD_ARG_FROM_YA que extrae el signo correctamente
         ldy     #0
@@ -221,17 +221,17 @@ _fp_add:
         iny
         lda     (b_ptr_zp),y
         sta     temp_operand+4
-        
+
         ; Llamar FADD con dirección de temp_operand
         lda     #<temp_operand
         ldy     #>temp_operand
         jsr     FADD
-        
+
         ; Usar STORE_FAC_AT_YX_ROUNDED para guardar correctamente
         ldx     result_ptr_zp
         ldy     result_ptr_zp+1
         jsr     STORE_FAC_AT_YX_ROUNDED
-        
+
         rts
 
 .segment "BSS"
@@ -249,23 +249,23 @@ _fp_sub:
         ; Guardar parámetros: fp_sub(a, b, result)
         sta     result_ptr_zp
         stx     result_ptr_zp+1
-        
+
         jsr     popax
         sta     b_ptr_zp
         stx     b_ptr_zp+1
-        
+
         jsr     popax
         sta     a_ptr_zp
         stx     a_ptr_zp+1
-        
+
         ; Limpiar extensiones
         lda     #0
         sta     FACEXTENSION
         sta     ARGEXTENSION
-        
+
         ; FSUB hace: FAC = (memoria) - FAC
         ; Para a-b, cargar 'b' en FAC y 'a' en memoria
-        
+
         ; Copiar 'b' a FAC extrayendo signo de bit 7 de byte[1]
         ldy     #0
         lda     (b_ptr_zp),y
@@ -293,7 +293,7 @@ _fp_sub:
         iny
         lda     (b_ptr_zp),y
         sta     FAC+4
-        
+
         ; Copiar 'a' a temp_operand (el minuendo)
         ldy     #0
         lda     (a_ptr_zp),y
@@ -310,17 +310,17 @@ _fp_sub:
         iny
         lda     (a_ptr_zp),y
         sta     temp_operand+4
-        
+
         ; Llamar FSUB: FAC = temp_operand(a) - FAC(b) = a-b
         lda     #<temp_operand
         ldy     #>temp_operand
         jsr     FSUB
-        
+
         ; Usar STORE_FAC_AT_YX_ROUNDED para guardar correctamente
         ldx     result_ptr_zp
         ldy     result_ptr_zp+1
         jsr     STORE_FAC_AT_YX_ROUNDED
-        
+
         rts
 
 ; ==============================================================================
@@ -331,20 +331,20 @@ _fp_mul:
         ; Guardar parámetros
         sta     result_ptr_zp
         stx     result_ptr_zp+1
-        
+
         jsr     popax
         sta     b_ptr_zp
         stx     b_ptr_zp+1
-        
+
         jsr     popax
         sta     a_ptr_zp
         stx     a_ptr_zp+1
-        
+
         ; Limpiar extensiones
         lda     #0
         sta     FACEXTENSION
         sta     ARGEXTENSION
-        
+
         ; Copiar 'a' a FAC extrayendo signo de bit 7 de byte[1]
         ldy     #0
         lda     (a_ptr_zp),y
@@ -372,7 +372,7 @@ _fp_mul:
         iny
         lda     (a_ptr_zp),y
         sta     FAC+4
-        
+
         ; Copiar 'b' a temp_operand
         ldy     #0
         lda     (b_ptr_zp),y
@@ -389,18 +389,18 @@ _fp_mul:
         iny
         lda     (b_ptr_zp),y
         sta     temp_operand+4
-        
+
         ; Llamar FMULT
         lda     #<temp_operand
         ldy     #>temp_operand
         jsr     FMULT
-        
+
         ; Usar STORE_FAC_AT_YX_ROUNDED para guardar correctamente
         ; Esta función maneja el formato de signo correctamente
         ldx     result_ptr_zp
         ldy     result_ptr_zp+1
         jsr     STORE_FAC_AT_YX_ROUNDED
-        
+
         rts
 
 ; ==============================================================================
@@ -413,23 +413,23 @@ _fp_div:
         ; Guardar parámetros
         sta     result_ptr_zp
         stx     result_ptr_zp+1
-        
+
         jsr     popax
         sta     b_ptr_zp
         stx     b_ptr_zp+1
-        
+
         jsr     popax
         sta     a_ptr_zp
         stx     a_ptr_zp+1
-        
+
         ; Limpiar extensiones
         lda     #0
         sta     FACEXTENSION
         sta     ARGEXTENSION
-        
+
         ; FDIV hace: FAC = (memoria) / FAC
         ; Para a/b, cargar 'b' en FAC y 'a' en memoria
-        
+
         ; Copiar 'b' a FAC extrayendo signo de bit 7 de byte[1]
         ldy     #0
         lda     (b_ptr_zp),y
@@ -457,7 +457,7 @@ _fp_div:
         iny
         lda     (b_ptr_zp),y
         sta     FAC+4
-        
+
         ; Copiar 'a' a temp_operand (el dividendo)
         ldy     #0
         lda     (a_ptr_zp),y
@@ -474,17 +474,17 @@ _fp_div:
         iny
         lda     (a_ptr_zp),y
         sta     temp_operand+4
-        
+
         ; Llamar FDIV: FAC = temp_operand(a) / FAC(b) = a/b
         lda     #<temp_operand
         ldy     #>temp_operand
         jsr     FDIV
-        
+
         ; Usar STORE_FAC_AT_YX_ROUNDED para guardar correctamente
         ldx     result_ptr_zp
         ldy     result_ptr_zp+1
         jsr     STORE_FAC_AT_YX_ROUNDED
-        
+
         rts
 
 ; ==============================================================================
@@ -520,7 +520,7 @@ _fp_int_to_fac:
         ; CC65 pasa: A=low, X=high
         sta     int_low
         stx     int_high
-        
+
         ; Limpiar FAC
         lda     #0
         sta     FAC
@@ -530,20 +530,20 @@ _fp_int_to_fac:
         sta     FAC+4
         sta     FACSIGN
         sta     FACEXTENSION
-        
+
         ; Verificar si es cero
         lda     int_low
         ora     int_high
         beq     @done           ; Si es 0, ya está listo
-        
+
         ; Verificar signo
         lda     int_high
         bpl     @positive
-        
+
         ; Número negativo: hacer complemento a 2
         lda     #$FF
         sta     FACSIGN         ; Marcar como negativo
-        
+
         ; Negar el número: ~value + 1
         lda     int_low
         eor     #$FF
@@ -554,7 +554,7 @@ _fp_int_to_fac:
         eor     #$FF
         adc     #0
         sta     int_high
-        
+
 @positive:
         ; Ahora convertir el valor absoluto
         ; Poner valor en FAC+1/FAC+2 (16 bits en posición alta)
@@ -565,20 +565,20 @@ _fp_int_to_fac:
         lda     #0
         sta     FAC+3
         sta     FAC+4
-        
+
         ; Exponente inicial: 0x90 (144) = 128 + 16
         ; Porque el valor está en los bits 8-23 de la mantisa de 24 bits
         lda     #$90
         sta     FAC
-        
+
         ; Normalizar: rotar izquierda hasta que bit 7 de FAC+1 esté set
 @normalize:
         lda     FAC+1
         bmi     @done           ; Bit 7 set = normalizado
-        
+
         ; Si FAC+1 es 0, mover bytes y ajustar exponente
         bne     @shift_one
-        
+
         ; FAC+1 = 0, mover todo un byte
         lda     FAC+2
         sta     FAC+1
@@ -588,7 +588,7 @@ _fp_int_to_fac:
         sta     FAC+3
         lda     #0
         sta     FAC+4
-        
+
         ; Restar 8 del exponente
         lda     FAC
         sec
@@ -597,27 +597,27 @@ _fp_int_to_fac:
         cmp     #$80            ; Si exponente < 0x80, underflow
         bcc     @zero_result
         jmp     @normalize
-        
+
 @zero_result:
         lda     #0
         sta     FAC
         sta     FAC+1
         rts
-        
+
 @shift_one:
         ; Rotar toda la mantisa un bit a la izquierda
         asl     FAC+4
         rol     FAC+3
         rol     FAC+2
         rol     FAC+1
-        
+
         ; Decrementar exponente
         dec     FAC
         lda     FAC
         cmp     #$80            ; Si exponente < 0x80, underflow
         bcc     @zero_result
         jmp     @normalize
-        
+
 @done:
         rts
 
@@ -631,7 +631,7 @@ int_high:   .byte 0
 ; ==============================================================================
 _fp_fac_to_int:
         jsr     QINT
-        ; QINT deja resultado en FAC+3 (low) y FAC+4 (high) 
+        ; QINT deja resultado en FAC+3 (low) y FAC+4 (high)
         ; CC65 espera A=low, X=high
         lda     FAC+3
         ldx     FAC+4
@@ -645,23 +645,23 @@ _fp_fac_to_int:
 _fp_load_fac:
         sta     tmpptr
         stx     tmpptr+1
-        
+
         ; Limpiar FACSIGN y FACEXTENSION antes de cargar
         lda     #0
         sta     FACSIGN
         sta     FACEXTENSION
-        
+
         ; Cargar exponente
         ldy     #0
         lda     (tmpptr),y
         sta     FAC
-        
+
         ; Cargar mantisa byte 1 CON bit 7
         iny
         lda     (tmpptr),y
         ora     #$80            ; Agregar bit 7 implícito
         sta     FAC+1
-        
+
         ; Cargar resto de mantisa
         iny
         lda     (tmpptr),y
@@ -682,18 +682,18 @@ _fp_load_fac:
 _fp_save_fac:
         sta     tmpptr
         stx     tmpptr+1
-        
+
         ; Guardar exponente
         ldy     #0
         lda     FAC
         sta     (tmpptr),y
-        
+
         ; Guardar mantisa byte 1 SIN bit 7
         iny
         lda     FAC+1
         and     #$7F            ; Quitar bit 7 implícito
         sta     (tmpptr),y
-        
+
         ; Guardar resto de mantisa
         iny
         lda     FAC+2
@@ -732,3 +732,246 @@ _fp_copy_fac_to_arg:
         bpl     @loop
         rts
 
+; ==============================================================================
+; WRAPPERS PARA FUNCIONES MATEMÁTICAS AVANZADAS
+; ==============================================================================
+; Estas funciones llaman a las rutinas de MS Basic desde C.
+;
+; Convención CC65 para fp_func(x, result):
+;   - A/X = último parámetro (result)
+;   - popax = penúltimo parámetro (x)
+;
+; La función MS Basic opera sobre FAC y deja resultado en FAC.
+; Luego guardamos FAC en result.
+; ==============================================================================
+
+; Importar funciones de MS Basic
+.import SIN, COS, TAN, ATN
+.import LOG, EXP, SQR, ABS
+.import INT, FPWRT
+
+; ==============================================================================
+; load_fac_from_ptr - Carga float desde puntero en a_ptr_zp a FAC
+; ==============================================================================
+load_fac_from_ptr:
+        ldy     #0
+        lda     (a_ptr_zp),y
+        sta     FAC
+        iny
+        lda     (a_ptr_zp),y
+        pha
+        and     #$80
+        beq     @pos
+        lda     #$FF
+        bne     @set_sign
+@pos:
+        lda     #$00
+@set_sign:
+        sta     FACSIGN
+        pla
+        ora     #$80
+        sta     FAC+1
+        iny
+        lda     (a_ptr_zp),y
+        sta     FAC+2
+        iny
+        lda     (a_ptr_zp),y
+        sta     FAC+3
+        iny
+        lda     (a_ptr_zp),y
+        sta     FAC+4
+        rts
+
+; ==============================================================================
+; void fp_sin(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_sin
+_fp_sin:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     SIN
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_cos(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_cos
+_fp_cos:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     COS
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_tan(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_tan
+_fp_tan:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     TAN
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_atn(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_atn
+_fp_atn:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     ATN
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_log(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_log
+_fp_log:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     LOG
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_exp(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_exp
+_fp_exp:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     EXP
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_sqr(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_sqr
+_fp_sqr:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     SQR
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_abs(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_abs
+_fp_abs:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     ABS
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_int(const msbasic_float_t *x, msbasic_float_t *result)
+; ==============================================================================
+.export _fp_int
+_fp_int:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+        jsr     load_fac_from_ptr
+        jsr     INT
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED
+
+; ==============================================================================
+; void fp_pow(const msbasic_float_t *a, const msbasic_float_t *b,
+;              msbasic_float_t *result)
+; result = a ^ b (potencia)
+; Usa FPWRT: ARG ^ FAC = EXP(LOG(ARG) * FAC)
+; ==============================================================================
+.export _fp_pow
+_fp_pow:
+        sta     result_ptr_zp
+        stx     result_ptr_zp+1
+        jsr     popax
+        sta     b_ptr_zp
+        stx     b_ptr_zp+1
+        jsr     popax
+        sta     a_ptr_zp
+        stx     a_ptr_zp+1
+
+        ; Cargar 'a' en ARG (formato almacenamiento, sin modificar)
+        ldy     #0
+        lda     (a_ptr_zp),y
+        sta     ARG
+        iny
+        lda     (a_ptr_zp),y
+        sta     ARG+1
+        iny
+        lda     (a_ptr_zp),y
+        sta     ARG+2
+        iny
+        lda     (a_ptr_zp),y
+        sta     ARG+3
+        iny
+        lda     (a_ptr_zp),y
+        sta     ARG+4
+
+        ; Cargar 'b' en FAC
+        jsr     load_fac_from_ptr
+
+        ; Limpiar extensiones
+        lda     #0
+        sta     FACEXTENSION
+        sta     ARGEXTENSION
+
+        ; Llamar FPWRT: ARG ^ FAC
+        jsr     FPWRT
+
+        ; Guardar resultado
+        ldx     result_ptr_zp
+        ldy     result_ptr_zp+1
+        jmp     STORE_FAC_AT_YX_ROUNDED

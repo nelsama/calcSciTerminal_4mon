@@ -1,6 +1,9 @@
 # ============================================================================
-# Makefile - Calculadora de Punto Flotante para Monitor 6502
+# Makefile - Calculadora Científica (Terminal UART)
 # ============================================================================
+# Calculadora de punto flotante con funciones trigonométricas y parser de
+# expresiones. Usa las rutinas de MSBasic para las operaciones matemáticas.
+#
 # Uso:
 #   make        - Compilar el programa
 #   make clean  - Limpiar archivos generados
@@ -18,6 +21,7 @@ LD = $(CC65_HOME)\bin\ld65.exe
 
 # Directorios
 SRC_DIR = src
+INCLUDE_DIR = include
 CONFIG_DIR = config
 BUILD_DIR = build
 OUTPUT_DIR = output
@@ -27,34 +31,43 @@ LIB_DIR = ../../libs
 LD_CONFIG = $(CONFIG_DIR)\programa.cfg
 
 # ============================================
-# LIBRERÍAS (agregar más aquí)
+# LIBRERÍAS
 # ============================================
-TM1638_DIR = $(LIB_DIR)/tm1638-6502-cc65
-MSBASIC_FLOAT_DIR = libs/msbasic-float
-MSBASIC_DIR = $(MSBASIC_FLOAT_DIR)/msbasic
+MSBASIC_FLOAT_DIR = libs\msbasic-float
+MSBASIC_DIR = $(MSBASIC_FLOAT_DIR)\msbasic
 
-INCLUDES = -I$(TM1638_DIR) -I$(MSBASIC_FLOAT_DIR)/include
+INCLUDES = -I$(INCLUDE_DIR) -I$(MSBASIC_FLOAT_DIR)\include
 
 # Nombre del programa
-PROGRAM_NAME = calc-float
+PROGRAM_NAME = calc-sci
+
+# Versión (se pasa al código C)
+VERSION_MAJOR = 1
+VERSION_MINOR = 0
+VERSION_PATCH = 0
 
 # Archivos de salida
 PROGRAM = $(OUTPUT_DIR)\$(PROGRAM_NAME).bin
 MAP_FILE = $(OUTPUT_DIR)\$(PROGRAM_NAME).map
 
 # Archivos fuente
-C_SOURCES = $(SRC_DIR)\main.c $(MSBASIC_FLOAT_DIR)\src\float_convert.c
-ASM_SOURCES = $(SRC_DIR)\startup.s $(MSBASIC_FLOAT_DIR)\src\msbasic_wrapper.s $(MSBASIC_FLOAT_DIR)\src\msbasic_float_only.s
+C_SOURCES = $(SRC_DIR)\main.c $(SRC_DIR)\parser.c $(MSBASIC_FLOAT_DIR)\src\float_convert.c
+ASM_SOURCES = $(SRC_DIR)\startup.s $(MSBASIC_FLOAT_DIR)\src\msbasic_wrapper.s \
+              $(MSBASIC_FLOAT_DIR)\src\msbasic_float_only.s \
+              $(MSBASIC_FLOAT_DIR)\src\msbasic_trig.s
 
 # Archivos objeto
-C_OBJECTS = $(BUILD_DIR)\main.o $(BUILD_DIR)\float_convert.o
-ASM_OBJECTS = $(BUILD_DIR)\startup.o $(BUILD_DIR)\msbasic_wrapper.o $(BUILD_DIR)\msbasic_float_only.o
-TM1638_OBJ = $(BUILD_DIR)\tm1638.o
+C_OBJECTS = $(BUILD_DIR)\main.o $(BUILD_DIR)\parser.o $(BUILD_DIR)\float_convert.o
+ASM_OBJECTS = $(BUILD_DIR)\startup.o $(BUILD_DIR)\msbasic_wrapper.o \
+              $(BUILD_DIR)\msbasic_float_only.o $(BUILD_DIR)\msbasic_trig.o
 
-OBJECTS = $(ASM_OBJECTS) $(C_OBJECTS) $(TM1638_OBJ)
+OBJECTS = $(ASM_OBJECTS) $(C_OBJECTS)
 
 # Flags del compilador C
-CFLAGS = -t none $(INCLUDES) -O --cpu 6502 -I $(SRC_DIR) -I include
+CFLAGS = -t none $(INCLUDES) -O --cpu 6502 -I $(SRC_DIR) \
+         -DVERSION_MAJOR=$(VERSION_MAJOR) \
+         -DVERSION_MINOR=$(VERSION_MINOR) \
+         -DVERSION_PATCH=$(VERSION_PATCH)
 
 # Flags del ensamblador
 ASFLAGS = -t none --cpu 6502
@@ -67,6 +80,8 @@ MSBASIC_ASFLAGS = --cpu 6502 \
 
 # Flags del linker
 LDFLAGS = -C $(LD_CONFIG) -m $(MAP_FILE)
+
+SHELL = cmd.exe
 
 # ============================================================================
 # REGLAS PRINCIPALES
@@ -93,6 +108,9 @@ dirs:
 $(BUILD_DIR)\main.o: $(SRC_DIR)\main.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+$(BUILD_DIR)\parser.o: $(SRC_DIR)\parser.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
 $(BUILD_DIR)\float_convert.o: $(MSBASIC_FLOAT_DIR)\src\float_convert.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
@@ -104,17 +122,17 @@ $(BUILD_DIR)\startup.o: $(SRC_DIR)\startup.s
 $(BUILD_DIR)\msbasic_wrapper.o: $(MSBASIC_FLOAT_DIR)\src\msbasic_wrapper.s
 	$(CA65) $(ASFLAGS) -I$(MSBASIC_DIR) -o $@ $<
 
-# Ensamblar módulo MSBasic completo
+# Ensamblar módulo float MSBasic completo (con rutinas aritméticas)
 $(BUILD_DIR)\msbasic_float_only.o: $(MSBASIC_FLOAT_DIR)\src\msbasic_float_only.s
+	$(CA65) $(MSBASIC_ASFLAGS) -o $@ $<
+
+# Ensamblar módulo trigonométrico MSBasic (SIN, COS, TAN, ATN)
+$(BUILD_DIR)\msbasic_trig.o: $(MSBASIC_FLOAT_DIR)\src\msbasic_trig.s
 	$(CA65) $(MSBASIC_ASFLAGS) -o $@ $<
 
 # Linkar
 $(PROGRAM): $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(CC65_HOME)\lib\none.lib
-
-# Compilar TM1638
-$(TM1638_OBJ): $(TM1638_DIR)/src/tm1638.c
-	$(CC) -c $(CFLAGS) -o $@ $<
 
 # ============================================================================
 # UTILIDADES
