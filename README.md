@@ -1,137 +1,86 @@
-# Calculadora de Punto Flotante - Monitor 6502
+# Calculadora Científica - Monitor 6502 (Terminal UART)
 
-Calculadora de punto flotante completa usando el módulo **TM1638** (display de 8 dígitos + 16 botones) con el Monitor 6502 en la Tang Nano 9K.
-
-## Módulo TM1638
-
-![TM1638 Display Module](docs/images/tm1638-7.png)
-
-### Acerca del TM1638
-
-El **TM1638** es un controlador LED/teclado integrado muy utilizado en proyectos con microcontroladores. Este proyecto utiliza el módulo **QYF-TM1638**, que proporciona:
-
-- **Display LED de 8 dígitos**: Segmentos de 7 puntos para mostrar números y algunos caracteres
-- **16 botones tactiles**: Organizados en una matriz de 4×4 para entrada de datos
-- **LEDs de estado**: Que pueden indicar información adicional
-- **Interfaz serial simple**: Comunicación mediante 3 líneas (STB/CLK/DIO)
-- **Bajo consumo**: Ideal para aplicaciones embebidas
-- **Común en kits educativos y de prototipado**
-
-El TM1638 es especialmente popular en calculadoras digitales, cronómetros y paneles de control por su combinación de display de alta visibilidad y entrada de usuario integrada.
+Calculadora de punto flotante con funciones trigonométricas, logaritmos, exponenciales y parser de expresiones. Se comunica vía **terminal UART** — no requiere hardware adicional.
 
 ## Características
 
-- ✅ Operaciones: suma (+), resta (-), multiplicación (\*), división (/)
-- ✅ Operaciones encadenadas: el resultado se reutiliza como primer operando
-- ✅ Repetición de operación: presionar `=` múltiples veces repite la última operación
-- ✅ Números grandes hasta ~16 millones
-- ✅ Decimales pequeños (ej: 0.000123)
-- ✅ Precisión: ~6-7 dígitos significativos
-- ✅ Redondeo inteligente (122.9999 → 123)
-- ✅ Números periódicos (1/3 = 0.333333)
-- ✅ Usa rutinas de punto flotante de **MSBasic**
-- ✅ Display adapta decimales según espacio disponible
-- ✅ Interfaz tipo calculadora estándar
-- ✅ Registro de operaciones por UART en formato legible
-- ✅ Comando `quit` por UART para volver al monitor
-- ✅ Validación de división por cero (muestra `DIV/0`)
+- ✅ **Operadores**: `+`, `-`, `*`, `/`, `^` (potencia)
+- ✅ **Paréntesis** anidados para agrupar expresiones
+- ✅ **Funciones trigonométricas**: `sin()`, `cos()`, `tan()`, `atan()` (radianes)
+- ✅ **Logaritmo natural** `log()` y **exponencial** `exp()`
+- ✅ **Raíz cuadrada** `sqrt()`/`sqr()` y **valor absoluto** `abs()`
+- ✅ **Constante** `pi`
+- ✅ **Conversión grados/radianes**: `d2r()`, `r2d()`
+- ✅ **Precisión**: ~6-7 dígitos significativos (formato MSBasic 5 bytes)
+- ✅ **Usa rutinas de punto flotante de MSBasic**
+- ✅ **Manejo de errores**: división por cero, raíz de negativo, log de ≤ 0
+- ✅ **Comandos**: `quit`/`exit` (volver al monitor), `help` (ayuda)
 
-## Distribución del Teclado
+## Ejemplos
 
 ```
-[1] [2] [3] [+]  ← Teclas 1,2,3,4
-[4] [5] [6] [-]  ← Teclas 5,6,7,8  
-[7] [8] [9] [*]  ← Teclas 9,10,11,12
-[.] [0] [=] [/]  ← Teclas 13,14,15,16
+> 2+3*4
+= 14
+
+> sin(pi/2)
+= 1
+
+> sin(d2r(45))
+= 0.707107
+
+> 2^3
+= 8
+
+> log(exp(5))
+= 5
+
+> sin(0.5)^2+cos(0.5)^2
+= 1
+
+> 1/0
+ERR: Division by zero
 ```
-
-- **.**: Punto decimal (permite ingresar números con decimales)
-- **=**: Igual (ejecuta la operación). Presionar repetidamente repite la última operación
-- **Presión larga de [.]** (500ms): Clear - reinicia la calculadora
-- **Presión larga de [-]** (500ms): Cambia el signo del número actual (+/-)
-- **DIV/0**: Se muestra en el display si se intenta dividir por cero
-
-## Ejemplos de Operaciones
-
-| Operación | Resultado |
-|-----------|-----------|
-| 1 / 2 | 0.5 |
-| 1 / 3 | 0.333333 |
-| 1 / 7 × 10000 | 1428.571 |
-| 0.000123 × 1000000 | 123 |
-| 55555 × 80 | 4444400 |
-| 1.2 - 3 | -1.8 |
-| 10 + 5 = 15, luego = | 20 (repite: 15 + 5) |
 
 ## Estructura del Proyecto
 
 ```
-CalculadorapuntoFlotante-Tm1638/
+CalculadoraPuntoFlotante-Terminal/
 ├── src/
-│   ├── main.c               # Código principal de la calculadora
-│   ├── float_convert.c      # Conversiones string ↔ float
-│   ├── msbasic_wrapper.s    # Wrapper ASM para rutinas MSBasic
-│   ├── msbasic_float_only.s # Rutinas de punto flotante MSBasic
-│   └── startup.s            # Código de inicio del runtime C
+│   ├── main.c                    # Terminal UART + comandos
+│   ├── parser.c                  # Parser de expresiones
+│   ├── startup.s                 # Código de inicio del runtime C
 ├── include/
-│   ├── romapi.h             # Definiciones de ROM API
-│   └── msbasic_float.h      # Header para punto flotante
-├── config/
-│   └── programa.cfg         # Configuración del linker
+│   ├── parser.h                  # Header del parser
+│   └── romapi.h                  # Definiciones de ROM API
 ├── libs/
-│   └── msbasic/             # Fuentes originales de MSBasic
-├── build/                   # Archivos objeto (generados)
-├── output/                  # Binario final (generado)
-├── makefile                 # Script de compilación
-└── README.md                # Este archivo
+│   └── msbasic-float/            # Librería reusable de punto flotante
+│       ├── include/
+│       │   └── msbasic_float.h   # API completa (25+ funciones)
+│       └── src/
+│           ├── msbasic_float_only.s  # Aritmética MS Basic
+│           ├── msbasic_trig.s        # Trigonometría MS Basic
+│           ├── msbasic_wrapper.s     # Wrappers C
+│           └── float_convert.c       # String ↔ float
+├── config/
+│   └── programa.cfg              # Configuración del linker
+├── build/                        # Archivos objeto (generados)
+├── output/                       # Binario final (generado)
+├── makefile                      # Script de compilación
+└── README.md                     # Este archivo
 ```
 
 ## Hardware Requerido
 
 - **Tang Nano 9K** con Monitor 6502 v2.2.0+
-- **Módulo TM1638** (QYF-TM1638: 8 dígitos, 16 botones)
+- **Conexión UART** (USB-TTL o similar) para la terminal
 
-### Configuración de Pines
-
-Este proyecto está configurado para que el dispositivo TM1638 esté conectado al **puerto 0xC000** con los siguientes pines:
-
-- **Bit 0 - CLK (Clock)**: Señal de reloj para sincronización
-- **Bit 1 - DIO (Data Input/Output)**: Línea de datos bidireccional
-- **Bit 2 - STB (Strobe)**: Señal de selección del chip
-
-### Dónde Obtener el Módulo TM1638
-
-El módulo TM1638 es muy económico y ampliamente disponible en plataformas de comercio electrónico:
-
-- **AliExpress**: Buscar "TM1638" o "QYF TM1638" - Costo típico: $2-5 USD
-  - Disponible en múltiples vendedores
-  - Tiempo de envío: 10-30 días (envío estándar)
-  - Opción de envío express disponible
-  
-- **eBay**: Buscar "TM1638 module" - Similar en precio y disponibilidad
-
-- **Banggood**: Otra plataforma asiática con precios competitivos
-
-- **Amazon**: Disponible a precios más elevados pero con envío rápido
-
-**Recomendaciones:**
-- Verificar que sea el modelo "8 dígitos + 16 botones" (QYF-TM1638)
-- Los módulos de 8 dígitos sin botones NO funcionan con este código
-- Algunos vendedores venden tanto módulos sueltos como con cable pre-soldado
-- El módulo viene con 3 pins de conexión (VCC, GND, datos) - NO requiere voltajes especiales
-
-**Alternativa de clones:**
-- Muchos vendedores en AliExpress ofrecen módulos TM1638 compatibles de diferentes marcas
-- La mayoría funcionan igual si tienen la misma estructura (8 dígitos de 7 segmentos + 16 botones)
-- Precio: generalmente entre $1-3 USD con envío internacional
+No requiere módulos adicionales — toda la interacción es por terminal.
 
 ## Software Requerido
 
 - **CC65** instalado en `D:\cc65` (o ajustar ruta en makefile)
 - **Monitor 6502 v2.2.0+** con ROM API
-- **Librería TM1638** en `../../libs/tm1638-6502-cc65`
-  - Repositorio: https://github.com/nelsama/tm1638-6502-cc65
-  - Librería de control para el módulo TM1638 (display + teclado)
+- **Terminal serie** (PuTTY, screen, minicom, etc.) a 115200 baud
 
 ## Compilación
 
@@ -143,12 +92,12 @@ make
 make clean
 ```
 
-El binario se genera en `output/calc-float.bin` (~13KB)
+El binario se genera en `output/calc-sci.bin` (~10.5KB)
 
 ## Instalación y Uso
 
 ### Vía SD Card
-1. Copiar `output/calc-float.bin` a la SD Card como `CALC`
+1. Copiar `output/calc-sci.bin` a la SD Card como `CALC`
 2. En el monitor:
 ```
 LOAD CALC 0800
@@ -161,54 +110,80 @@ XRECV 0800
 R 0800
 ```
 
-## Funcionamiento
+## Funciones Disponibles
 
-La calculadora funciona como una calculadora estándar:
+### Operadores (precedencia)
+| Operador | Descripción | Asociatividad |
+|----------|-------------|---------------|
+| `()` | Paréntesis | Inner-first |
+| `-` | Negación unaria | Right-to-left |
+| `^` | Potencia | **Right-associative** |
+| `*`, `/` | Multiplicación, División | Left-associative |
+| `+`, `-` | Suma, Resta | Left-associative |
 
-1. **Ingresar primer número** (con dígitos y opcionalmente punto decimal)
-2. **Presionar operación** (+, -, \*, /)
-3. **Ingresar segundo número**
-4. **Presionar =** para ver el resultado
-5. **Presionar =** nuevamente para repetir la última operación con el nuevo resultado
+### Funciones
+| Función | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `sin(x)` | Seno (radianes) | `sin(pi/2)` = 1 |
+| `cos(x)` | Coseno (radianes) | `cos(pi)` = -1 |
+| `tan(x)` | Tangente (radianes) | `tan(pi/4)` = 1 |
+| `atan(x)` | Arco tangente (radianes) | `atan(1)` = π/4 |
+| `log(x)` | Logaritmo natural (x > 0) | `log(e)` = 1 |
+| `exp(x)` | Exponencial (e^x) | `exp(1)` = e |
+| `sqrt(x)` / `sqr(x)` | Raíz cuadrada (x ≥ 0) | `sqr(4)` = 2 |
+| `abs(x)` | Valor absoluto | `abs(-5)` = 5 |
+| `d2r(x)` | Grados → Radianes | `d2r(180)` = π |
+| `r2d(x)` | Radianes → Grados | `r2d(pi)` = 180 |
 
-### Clear (Limpiar)
-Mantener presionada la tecla [.] por 500ms para reiniciar la calculadora.
+### Constantes
+| Constante | Valor |
+|-----------|-------|
+| `pi` | 3.1415926535... |
 
-### Cambiar Signo (+/-)
-Mantener presionada la tecla [-] por 500ms para cambiar el signo del número actual.
-Presión corta de [-] sigue siendo el operador resta.
-
-### Salir (Quit)
-En la terminal UART, escriba `quit` (o solo `q`) y presione Enter para volver al monitor 6502. Al salir, el display TM1638 se apaga automáticamente.
-
-### Registro en UART
-Cada operación se muestra automáticamente en la terminal en formato legible. Esto permite mantener un historial visible de todos los cálculos realizados durante la sesión:
-
-```
--- Inicio de sesion --
-10 + 5 = 15
-CLEAR
-20 * 2 = 40
-40 * 2 = 80
-5 / 0 = DIV/0
--- Fin de sesion --
-```
+### Comandos
+| Comando | Acción |
+|---------|--------|
+| `quit` / `exit` | Volver al monitor 6502 |
+| `help` | Mostrar esta ayuda |
 
 ## Detalles Técnicos
 
 ### Formato de Punto Flotante MSBasic
-- 5 bytes: [exponente][mantisa1][mantisa2][mantisa3][mantisa4]
+- 5 bytes: `[exponente][mantisa1+signo][mantisa2][mantisa3][mantisa4]`
 - Signo: bit 7 del byte de mantisa1
 - Exponente: exceso 128 (0x80 = 2^0 = 1)
-- Mantisa: 24 bits con bit implícito
+- Precisión: ~6-7 dígitos decimales
+- Rango: ~±1.7×10^38
 
-### Conversiones Implementadas
-- **String → Float**: Construye dígito a dígito usando operaciones float
-- **Float → String**: Extrae parte entera y decimal, redondeo inteligente
+### Librería Reutilizable
+La carpeta `libs/msbasic-float/` es una librería independiente que puede usarse en otros proyectos 6502 con CC65. Incluye:
 
-### Limitaciones
-- Números mayores a ~16 millones muestran "ERR"
-- Display máximo de 8 caracteres (incluyendo signo y punto)
+- Operaciones aritméticas (+, -, ×, /)
+- Funciones trigonométricas (sin, cos, tan, atan)
+- Logaritmo natural y exponencial
+- Raíz cuadrada, valor absoluto
+- Conversión string ↔ float
+
+### Tamaño
+| Componente | Tamaño |
+|------------|--------|
+| Librería matemática | ~5.5 KB |
+| Calculadora completa | ~10.9 KB |
+| RAM disponible | ~13.8 KB |
+| Espacio libre | ~2.9 KB |
+
+## Diferencias con la Versión TM1638
+
+Este proyecto empezó como una calculadora con display TM1638. La versión actual:
+
+| Característica | TM1638 | Terminal UART |
+|---------------|--------|---------------|
+| Interfaz | Display 8 dígitos + 16 teclas | Terminal texto |
+| Expresiones | Solo 2 operandos | Completas con paréntesis |
+| Funciones | Solo +,-,×,/ | Trig, log, exp, sqr, etc. |
+| Constantes | No | pi |
+| Conversión | No | d2r, r2d |
+| Tamaño | ~12.8 KB | ~10.9 KB |
 
 ## 💖 Apóyame
 
