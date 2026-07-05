@@ -2,6 +2,54 @@
 
 Registro de cambios del proyecto.
 
+## [1.4.1] - 2026-01-19
+
+### Corregido
+- **Presión larga de `-`**: Reducido el tiempo de espera de 1000ms a 500ms para que el cambio de signo sea más responsivo
+
+### Versión
+- Actualizada a v1.4.1
+
+## [1.4.0] - 2026-01-19
+
+### Agregado
+- **Cambio de signo (+/-)**: Mantener presionada la tecla `-` (tecla 8) por 1 segundo cambia el signo del número actual. Presión corta sigue siendo el operador resta
+- **Función `wait_key_release_with_timeout()`**: Refactorizada la detección de presión larga/corta para las teclas `.` y `-` en una función reutilizable
+- **Funciones `toggle_sign()` e `is_negative()`**: Para gestionar el signo negativo en el buffer de entrada
+- **Ajuste en `add_digit()` y `add_decimal()`**: Ahora consideran correctamente el signo `-` al inicio del buffer
+
+### Versión
+- Actualizada a v1.4.0
+
+## [1.3.0] - 2026-01-19
+
+### Agregado
+- **Comando UART "quit"**: Escriba `quit` o `q` + Enter en la terminal para volver al monitor 6502. Al salir, el display TM1638 se apaga (pantalla en blanco + brillo 0) y los LEDs se desactivan
+- **Registro de operaciones en UART**: Cada operación se muestra en la consola en formato legible, incluyendo operaciones encadenadas y el comando CLEAR:
+  ```
+  10 + 5 = 15
+  CLEAR            ← clear manual
+  20 * 2 = 40
+  40 * 2 = 80       ← repitiendo ultima operacion con =
+  ```
+- **Variable `last_op`**: Registra la última operación seleccionada para poder repetirla presionando `=` múltiples veces (comportamiento de calculadora de bolsillo)
+- **Banner de inicio/fin de sesión**: `-- Inicio de sesion --` y `-- Fin de sesion --` para marcar el inicio y fin de la calculadora
+
+### Corregido
+- **División por cero**: Agregada validación que muestra "DIV/0" en el display y UART, evitando llamar a la rutina MSBasic (bucle infinito)
+- **Eliminado debug UART permanente**: Se removieron todas las trazas de debug en `save_current_input()`, `execute_operation()`, y las funciones `uart_print_hex()`, `debug_print_fac()`, `debug_print_arg()`, `debug_print_temp()`
+- **Eliminada función `fp_test_direct()`** del wrapper ASM (código de test no usado en producción)
+
+### Optimizado
+- **Wrapper ASM**: Las cuatro operaciones aritméticas ahora usan macros `copy_mem_to_fac` y `copy_mem_to_temp`, eliminando ~80 líneas de código duplicado
+- **`save_current_input()`**: Simplificada para siempre usar `fp_string_to_float()`. Eliminada la optimización prematura con tabla de constantes que parseaba el buffer dos veces
+- **Loop principal**: Movida la declaración de `dot_hold_count` dentro del bloque donde se usa. Eliminado un `rom_delay_ms(10)` redundante
+- **Tecla `=`**: Ahora también funciona desde `STATE_RESULT`, permitiendo repetir la última operación presionando = múltiples veces
+- **`fp_float_to_string()`**: Agregado safety check para `max_decimals` para evitar underflow
+
+### Versión
+- Actualizada a v1.3.0
+
 ## [1.2.0] - 2026-01-19
 
 ### Corregido
