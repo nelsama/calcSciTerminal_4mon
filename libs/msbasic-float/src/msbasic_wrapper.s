@@ -943,12 +943,28 @@ _fp_pow:
         sta     a_ptr_zp
         stx     a_ptr_zp+1
 
-        ; Cargar 'a' en ARG (formato almacenamiento, sin modificar)
+        ; Limpiar extensiones
+        lda     #0
+        sta     FACEXTENSION
+        sta     ARGEXTENSION
+
+        ; Cargar 'a' en ARG extrayendo signo (mismo formato interno que FAC)
         ldy     #0
-        lda     (a_ptr_zp),y
+        lda     (a_ptr_zp),y    ; Exponente
         sta     ARG
         iny
-        lda     (a_ptr_zp),y
+        lda     (a_ptr_zp),y    ; Mantisa alta + signo en bit 7
+        pha
+        and     #$80            ; Extraer bit de signo
+        beq     @a_pos
+        lda     #$FF            ; Negativo
+        bne     @a_set_sign
+@a_pos:
+        lda     #$00            ; Positivo
+@a_set_sign:
+        sta     ARGSIGN
+        pla
+        ora     #$80            ; Poner bit implícito
         sta     ARG+1
         iny
         lda     (a_ptr_zp),y
@@ -960,17 +976,16 @@ _fp_pow:
         lda     (a_ptr_zp),y
         sta     ARG+4
 
-        ; Cargar 'b' en FAC (copiar b_ptr_zp a a_ptr_zp para load_fac_from_ptr)
+        ; Cargar 'b' en FAC
         lda     b_ptr_zp
         sta     a_ptr_zp
         lda     b_ptr_zp+1
         sta     a_ptr_zp+1
         jsr     load_fac_from_ptr
 
-        ; Limpiar extensiones
-        lda     #0
-        sta     FACEXTENSION
-        sta     ARGEXTENSION
+        ; Asegurar que Z flag refleje si FAC=0 antes de llamar FPWRT
+        ; (FPWRT empieza con beq EXP para detectar FAC=0)
+        lda     FAC
 
         ; Llamar FPWRT: ARG ^ FAC
         jsr     FPWRT
