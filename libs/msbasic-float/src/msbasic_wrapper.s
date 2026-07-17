@@ -960,7 +960,11 @@ _fp_pow:
         lda     (a_ptr_zp),y
         sta     ARG+4
 
-        ; Cargar 'b' en FAC
+        ; Cargar 'b' en FAC (copiar b_ptr_zp a a_ptr_zp para load_fac_from_ptr)
+        lda     b_ptr_zp
+        sta     a_ptr_zp
+        lda     b_ptr_zp+1
+        sta     a_ptr_zp+1
         jsr     load_fac_from_ptr
 
         ; Limpiar extensiones
