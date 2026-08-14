@@ -3,6 +3,10 @@
 ; ============================================
 ; Inicializa el runtime CC65 para programas cargados en RAM
 ; Se ejecuta desde $0800
+;
+; El monitor llama al programa con JSR (subrutina).
+; Al salir, se restaura la dirección de retorno y el SP
+; del monitor para volver al prompt SIN reiniciar.
 ; ============================================
 
 .export _init
@@ -17,6 +21,10 @@
 ptr1:       .res 2
 ptr2:       .res 2
 count:      .res 2
+ret_lo:     .res 1   ; Byte bajo de la dirección de retorno al monitor
+ret_hi:     .res 1   ; Byte alto de la dirección de retorno al monitor
+mon_sp:     .res 1   ; SP hardware del monitor al momento del JSR
+save_sp:    .res 2   ; Software stack pointer del monitor (sp ZP)
 
 .segment "STARTUP"
 
@@ -24,6 +32,23 @@ _init:
     ; Deshabilitar interrupciones durante init
     sei
     cld
+    
+    ; Guardar la dirección de retorno del monitor (JSR $0800)
+    ; El monitor hizo JSR: el stack tiene [ret_hi][ret_lo], SP→ret_lo
+    pla
+    sta ret_lo
+    pla
+    sta ret_hi
+    
+    ; Guardar SP del monitor (nivel del contexto, antes del JSR)
+    tsx
+    stx mon_sp
+    
+    ; Guardar el software stack pointer del monitor (sp ZP de CC65)
+    lda sp
+    sta save_sp
+    lda sp+1
+    sta save_sp+1
     
     ; Inicializar stack pointer del 6502
     ldx #$FF
@@ -42,8 +67,30 @@ _init:
     ; Llamar a main
     jsr _main
     
-    ; Si main retorna, saltar al monitor en ROM
-    jmp $8000
+    ; ============================================================
+    ; SALIDA: volver al monitor SIN reiniciar
+    ; El monitor nos llamó con JSR, así que con RTS volvemos al
+    ; prompt (muestra "Retorno de $0800") en lugar de reiniciar.
+    ; ============================================================
+    ; Restaurar el software stack pointer del monitor
+    lda save_sp
+    sta sp
+    lda save_sp+1
+    sta sp+1
+    
+    ; Restaurar SP hardware del monitor (nivel del contexto)
+    ldx mon_sp
+    txs
+    
+    ; Re-habilitar interrupciones (el monitor las tenía activas)
+    cli
+    
+    ; Re-construir la dirección de retorno en el stack
+    lda ret_hi
+    pha          ; [mon_sp-1] = ret_hi
+    lda ret_lo
+    pha          ; [mon_sp-2] = ret_lo, SP = mon_sp-2
+    rts          ; → vuelve a mon_execute → prompt del monitor
 
 ; ============================================
 ; zerobss - Inicializa BSS a ceros
