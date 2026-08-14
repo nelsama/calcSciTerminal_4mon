@@ -16,7 +16,7 @@ Calculadora de punto flotante con funciones trigonométricas, logaritmos, expone
 - ✅ **Manejo de errores**: división por cero, raíz de negativo, log de ≤ 0
 - ✅ **Comandos**: `quit`/`exit` (volver al monitor), `help` (ayuda)
 
-## Ejemplos
+### Ejemplos
 
 ```
 > 2+3*4
@@ -39,6 +39,12 @@ Calculadora de punto flotante con funciones trigonométricas, logaritmos, expone
 
 > 1/0
 ERR: Division by zero
+
+> --5
+= 5
+
+> 2++3
+= 5
 ```
 
 ## Estructura del Proyecto
@@ -116,7 +122,7 @@ R 0800
 | Operador | Descripción | Asociatividad |
 |----------|-------------|---------------|
 | `()` | Paréntesis | Inner-first |
-| `-` | Negación unaria | Right-to-left |
+| `-`, `+` | Unario (negación, signo) — soporta anidados: `--5` = 5 | Right-to-left |
 | `^` | Potencia | **Right-associative** |
 | `*`, `/` | Multiplicación, División | Left-associative |
 | `+`, `-` | Suma, Resta | Left-associative |

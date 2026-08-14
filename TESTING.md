@@ -85,7 +85,7 @@ de una vez. El script usa **eco-sync**: envía un carácter y espera a que el
 monitor lo haga eco antes de enviar el siguiente. Esto garantiza que cada
 carácter llega.
 
-## Pruebas Incluidas (42)
+## Pruebas Incluidas (95)
 
 ### Operaciones básicas
 ```
@@ -165,6 +165,99 @@ log(0)         = ERR: Math error
 log(-5)        = ERR: Math error
 ```
 
+### Casos de borde
+
+#### División por cero (variantes)
+```
+0/0            = ERR: Division by zero
+-5/0           = ERR: Division by zero
+0/5            = 0
+```
+
+#### Fracciones periódicas
+```
+1/3            = 0.333333
+1/7            = 0.142857
+2/3            = 0.666666 (±1e-5)
+```
+
+#### Ceros
+```
+sqr(0)         = 0
+abs(0)         = 0
+0+5            = 5
+0*5            = 0
+5-5            = 0
+```
+
+#### Potencia con ceros
+```
+2^0            = 1
+0^2            = 0
+0^0            = 1
+```
+
+#### Números negativos
+```
+-5+3           = -2
+-2*-3          = 6
+2*-3           = -6
+-2+3           = 1
+abs(-3.5)      = 3.5
+```
+
+#### Negación anidada y unario +  (fix v1.0.2)
+```
+--5            = 5
+---5           = -5
+--5+3          = 8
+2++3           = 5
++5             = 5
+-2^2           = 4
+(-2)^2         = 4
+(-2)^3         = -8
+```
+
+> **Bug corregido**: `--5` daba `Syntax error`. El parser ahora usa
+> recursión en `parse_unary` para negaciones anidadas y soporta unario `+`.
+
+#### Decimales extremos
+```
+.5             = 0.5
+5.             = 5
+0.000001       = 0.000001
+999999.999     = 999999.999267 (±0.001)
+```
+
+#### Espacios
+```
+  2  +  3      = 5
+```
+
+#### Funciones de esquina
+```
+atan(1)        = 0.785398
+atan(0)        = 0
+atan(-1)       = -0.785398
+tan(0)         = 0
+sqr(100)       = 10
+```
+
+#### Errores de sintaxis
+```
+(2+3           = ERR: Expected ')'
+2+3)           = ERR: Syntax error
+2**3           = ERR: Syntax error
+2+*3           = ERR: Syntax error
+sin            = ERR: Expected '('
+sin(           = ERR: Unexpected end of expression
+2#3            = ERR: Syntax error
+2+abc          = ERR: Unknown function
++              = ERR: Unexpected end of expression
+*5             = ERR: Syntax error
+(2+3))         = ERR: Syntax error
+```
+
 ## Precisión Esperada
 
 El formato float de MS Basic tiene **~6-7 dígitos decimales** de precisión.
@@ -183,8 +276,17 @@ Esto es normal y coincide con el comportamiento del MS BASIC original
 ## Resultado de la última ejecución
 
 ```
-RESULTADO: 42 OK, 0 FAIL de 42 pruebas
+RESULTADO: 95 OK, 0 FAIL de 95 pruebas
 ```
+
+## Bugs encontrados por las pruebas
+
+| Bug | Síntoma | Fix | Versión |
+|-----|---------|-----|---------|
+| fp_pow usaba `a_ptr_zp` para ambos operandos | `2^8` = e^8 = 2980.95 | Copiar `b_ptr_zp` a `a_ptr_zp` antes de cargar FAC | 1.0.0 |
+| FPWRT heredaba Z flag incorrecto | `2^8` = e^8 = 2980.95 | `lda FAC` antes de `jsr FPWRT` | 1.0.1 |
+| Conversor string usaba 24 bits de mantisa | `850*40000` = ERR | 32 bits (bytes 1-4) y límite exp ≤ $A0 | 1.0.1 |
+| Negación anidada no soportada | `--5` = Syntax error | Recursión en `parse_unary` + unario `+` | 1.0.2 |
 
 ## Solución de problemas
 
