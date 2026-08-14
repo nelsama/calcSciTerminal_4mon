@@ -345,8 +345,9 @@ static uint8_t parse_atom(msbasic_float_t *result) {
  * ============================================================================ */
 
 /**
- * Parse unary minus and atom.
- * Grammar: unary := '-' atom | atom
+ * Parse unary minus/plus and atom.
+ * Grammar: unary := ('-' | '+')* atom
+ * Soporta negaciones anidadas: --5 = 5, -(-5) = 5
  *
  * @param result Pointer to store the result
  * @return 0 on success, 1 on error
@@ -356,9 +357,14 @@ static uint8_t parse_unary(msbasic_float_t *result) {
 
     if (*g_pos == '-') {
         g_pos++;  /* skip '-' */
-        if (parse_atom(result)) return 1;
+        if (parse_unary(result)) return 1;
         fp_negate(result);
         return 0;
+    }
+
+    if (*g_pos == '+') {
+        g_pos++;  /* skip '+' (unario, no-op) */
+        return parse_unary(result);
     }
 
     return parse_atom(result);
