@@ -149,7 +149,7 @@ R 0800
 ### Comandos
 | Comando | Acción |
 |---------|--------|
-| `quit` / `exit` | Volver al monitor 6502 |
+| `quit` / `exit` | Volver al monitor 6502 **sin reiniciarlo** (muestra `Retorno de $0800` y sigue el prompt) |
 | `help` | Mostrar esta ayuda |
 
 ## Detalles Técnicos

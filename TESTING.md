@@ -287,6 +287,26 @@ RESULTADO: 95 OK, 0 FAIL de 95 pruebas
 | FPWRT heredaba Z flag incorrecto | `2^8` = e^8 = 2980.95 | `lda FAC` antes de `jsr FPWRT` | 1.0.1 |
 | Conversor string usaba 24 bits de mantisa | `850*40000` = ERR | 32 bits (bytes 1-4) y límite exp ≤ $A0 | 1.0.1 |
 | Negación anidada no soportada | `--5` = Syntax error | Recursión en `parse_unary` + unario `+` | 1.0.2 |
+| `quit` reiniciaba el monitor | Banner "Tang Nano 9K..." al salir | Guardar return address/SP del monitor y hacer RTS en vez de `jmp $8000` | 1.0.3 |
+
+## Comportamiento de quit/exit
+
+El monitor 6502 llama a los programas con **JSR** (subrutina). Al presionar
+`quit` o `exit`, la calculadora retorna con `RTS` y el monitor muestra
+`Retorno de $0800` volviendo a su prompt **sin reiniciar**:
+
+```
+> quit
+Volviendo al monitor...
+Retorno de $0800
+>          ← el monitor sigue vivo
+```
+
+Para lograrlo, `startup.s` guarda y restaura:
+- Dirección de retorno del JSR del monitor
+- SP hardware del monitor
+- Software stack pointer (sp ZP) del monitor
+- Bandera de interrupciones (cli al salir)
 
 ## Solución de problemas
 
