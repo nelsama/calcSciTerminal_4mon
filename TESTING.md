@@ -1,0 +1,204 @@
+# Pruebas Automatizadas - Calculadora Científica 6502
+
+Este documento explica cómo ejecutar el paquete de pruebas automatizadas
+contra el hardware real (Tang Nano 9K + Monitor 6502).
+
+## Requisitos
+
+- **Python 3** (usa solo librerías estándar: `socket`, `struct`, `time`)
+- **Bridge UART→TCP** (ESP32-C3 o similar) conectado al monitor 6502
+- **Compilar el programa primero**:
+
+```bash
+make
+```
+
+## Uso
+
+```bash
+python3 tools/test_calc.py
+```
+
+El script hace todo automáticamente:
+
+```
+1. Conecta al bridge (TCP raw)
+2. Envía 'quit' (por si la calculadora sigue activa)
+3. Espera el prompt del monitor
+4. Envía 'XRECV 0800' → el monitor entra en modo XMODEM
+5. Transfiere output/calc-sci.bin por XMODEM (checksum)
+6. Envía 'R 0800' → ejecuta la calculadora
+7. Envía 42 expresiones de prueba y valida resultados
+8. Envía 'quit' → vuelve al monitor
+```
+
+## Configuración
+
+Las constantes al inicio del script (`tools/test_calc.py`):
+
+```python
+HOST = "192.168.1.143"   # IP del bridge
+PORT = 23                 # Puerto TCP raw (ESP32-C3 bridge)
+BIN_FILE = "output/calc-sci.bin"
+```
+
+### Nota sobre el puerto
+
+El puerto 22 puede no ser el correcto. El bridge ESP32-C3 de este proyecto
+expone el UART por el **puerto 23** (telnet raw). Verifica con:
+
+```bash
+python3 -c "
+import socket
+for p in [22, 23, 80, 8080]:
+    s = socket.socket(); s.settimeout(2)
+    try:
+        s.connect(('192.168.1.143', p)); print(f'{p}: ABIERTO')
+    except: print(f'{p}: cerrado')
+    s.close()
+"
+```
+
+## Protocolo XMODEM
+
+El monitor 6502 usa **XMODEM checksum** (NAK inicial), no CRC:
+
+| Señal | Valor | Significado |
+|-------|-------|-------------|
+| NAK | `0x15` | Receptor pide **checksum** (modo usado) |
+| 'C' | `0x43` | Receptor pide CRC16 |
+| SOH | `0x01` | Inicio de bloque |
+| ACK | `0x06` | Bloque aceptado |
+| EOT | `0x04` | Fin de transferencia |
+| CAN | `0x18` | Cancelar |
+
+Formato de bloque (checksum):
+
+```
+[SOH][bloque#][255-bloque#][128 bytes datos][checksum mod 256]
+```
+
+## Comunicación con el 6502
+
+El monitor 6502 (3.375 MHz) pierde caracteres si se envía la línea completa
+de una vez. El script usa **eco-sync**: envía un carácter y espera a que el
+monitor lo haga eco antes de enviar el siguiente. Esto garantiza que cada
+carácter llega.
+
+## Pruebas Incluidas (42)
+
+### Operaciones básicas
+```
+2+2            = 4
+10-3           = 7
+6*7            = 42
+10/4           = 2.5
+0.1+0.2        = 0.3
+```
+
+### Precedencia y paréntesis
+```
+2+3*4          = 14
+(2+3)*4        = 20
+2*(3+4)        = 14
+((2+3)*2)+1    = 11
+2+3*4-6/2      = 11
+```
+
+### Números grandes
+```
+850*40000      = 34000000
+100000*100     = 10000000
+9999999+1      = 10000000
+```
+
+### Potencia
+```
+2^8            = 256
+2^10           = 1024
+3^2            = 9
+10^5           = 100000 (±0.001)
+4^0.5          = 2
+2^2^3          = 256   (asociativa a derecha)
+```
+
+### Trigonometría (tolerancia ±1e-5 por precisión float)
+```
+sin(0)         = 0
+cos(0)         ≈ 1     (0.999999 en el hardware)
+sin(pi/2)      ≈ 1     (0.999999)
+cos(pi)        ≈ -1    (-0.999999)
+sin(0.5)^2+cos(0.5)^2 = 1
+```
+
+### d2r / r2d / pi
+```
+d2r(180)       = 3.141592
+r2d(pi)        = 180
+sin(d2r(90))   ≈ 1     (0.999999)
+sin(d2r(45))   ≈ 0.707107 (0.707106)
+pi             = 3.141592
+```
+
+### Log / Exp
+```
+log(1)         = 0
+exp(0)         = 1
+exp(1)         = 2.718281
+log(exp(5))    = 5
+exp(log(10))   = 10
+```
+
+### Raíz / Abs
+```
+sqr(4)         = 2
+sqr(2)         = 1.414213
+abs(-5)        = 5
+abs(3.14)      = 3.139999 (precisión float)
+```
+
+### Errores
+```
+1/0            = ERR: Division by zero
+sqr(-4)        = ERR: Math error
+log(0)         = ERR: Math error
+log(-5)        = ERR: Math error
+```
+
+## Precisión Esperada
+
+El formato float de MS Basic tiene **~6-7 dígitos decimales** de precisión.
+Algunos valores pueden diferir en el último dígito:
+
+| Expresión | Hardware real | Valor teórico |
+|-----------|---------------|---------------|
+| `cos(0)` | 0.999999 | 1 |
+| `sin(pi/2)` | 0.999999 | 1 |
+| `sin(d2r(45))` | 0.707106 | 0.707107 |
+| `10^5` | 100000.000091 | 100000 |
+
+Esto es normal y coincide con el comportamiento del MS BASIC original
+(C64, Apple II). No es un bug.
+
+## Resultado de la última ejecución
+
+```
+RESULTADO: 42 OK, 0 FAIL de 42 pruebas
+```
+
+## Solución de problemas
+
+| Problema | Causa | Solución |
+|----------|-------|----------|
+| `ERR: Syntax error` al enviar XRECV | La calculadora sigue corriendo | El script envía `quit` automáticamente |
+| Caracteres perdidos (`2+34`) | Envío demasiado rápido | El script usa eco-sync (char por char) |
+| `No ACK para bloque N` en XMODEM | Modo CRC vs checksum | El script detecta NAK y usa checksum |
+| Timeout al conectar | Puerto equivocado | Verificar con el script de escaneo de puertos |
+
+## Archivos
+
+```
+tools/test_calc.py   ← Script de pruebas
+TESTING.md           ← Esta documentación
+output/calc-sci.bin  ← Binario probado
+```
