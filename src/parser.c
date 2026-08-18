@@ -34,6 +34,15 @@ static const char *g_pos;
 /** Error message from last failed parse (NULL if no error) */
 static const char *g_error;
 
+/** Ultimo resultado exitoso (para la palabra clave 'ans') */
+static msbasic_float_t g_ans;
+
+/** Flag: 1 si hay un resultado anterior valido.
+ *  Inicializado explicitamente a 0 para NO depender de la limpieza del BSS
+ *  (el XMODEM pisa el BSS con el padding y una static sin inicializador
+ *  podria arrancar con basura). */
+static uint8_t g_ans_valid = 0;
+
 /* ============================================================================
  * FORWARD DECLARATIONS
  * ============================================================================ */
@@ -322,10 +331,21 @@ static uint8_t parse_atom(msbasic_float_t *result) {
 
     /* Function call (starts with a letter) */
     if (is_letter(*g_pos)) {
-        /* Check for 'pi' constant (2 letters, not followed by letter or digit) */
+        /* Constante 'pi' (2 letras, no seguida de letra o digito) */
         if (g_pos[0] == 'p' && g_pos[1] == 'i' && !is_letter(g_pos[2]) && !is_digit(g_pos[2])) {
             fp_set_pi(result);
             g_pos += 2;
+            return 0;
+        }
+        /* Palabra clave 'ans': ultimo resultado exitoso (3 letras) */
+        if (g_pos[0] == 'a' && g_pos[1] == 'n' && g_pos[2] == 's' &&
+            !is_letter(g_pos[3]) && !is_digit(g_pos[3])) {
+            if (!g_ans_valid) {
+                g_error = "No previous result";
+                return 1;
+            }
+            *result = g_ans;
+            g_pos += 3;
             return 0;
         }
         return parse_function(result);
@@ -527,11 +547,26 @@ uint8_t parse_expression(const char *input, msbasic_float_t *result) {
 /**
  * Get the error message from the last failed parse.
  *
- * @return Pointer to a null-terminated error string, or empty string if no error
+ * @return Pointer to a null-terminated error string
  */
 const char* parser_get_error(void) {
     if (g_error) {
         return g_error;
     }
     return "";
+}
+
+/**
+ * Establece el ultimo resultado exitoso, disponible para la palabra clave
+ * 'ans' en la siguiente expresion. Debe llamarse despues de cada evaluacion
+ * exitosa; un error de evaluacion NO debe actualizar el valor.
+ *
+ * @param value Resultado a recordar (copia interna de 5 bytes)
+ */
+void parser_set_ans(const msbasic_float_t *value) {
+    unsigned char i;
+    for (i = 0; i < 5; i++) {
+        g_ans.bytes[i] = value->bytes[i];
+    }
+    g_ans_valid = 1;
 }

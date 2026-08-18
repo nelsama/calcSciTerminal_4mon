@@ -1,6 +1,61 @@
-# Changelog - Calculadora Punto Flotante TM1638
+# Changelog - Calculadora Científica (Terminal UART)
 
 Registro de cambios del proyecto.
+
+## [1.0.3] - 2026-08-17
+
+### Agregado
+- **Palabra clave `ans`**: reutiliza el último resultado exitoso en cualquier
+  expresión (`3*ans`, `ans^2`, `sin(ans)`). Un error no la modifica; sin
+  resultado previo devuelve `ERR: No previous result`.
+- **Pruebas automatizadas robustas**: numeración consecutiva (`1/105`...),
+  selección de tests por argumento, reintentos ante pérdida de caracteres y
+  manejo del APP LAUNCHER del Monitor 6502 v2.6.2.
+
+### Corregido
+- **`850*40000` = ERR**: el conversor float→string usaba 24 bits de mantisa y
+  rechazaba exponentes `> $98`. Ahora usa la mantisa completa de 32 bits
+  (bytes 1-4) con límite `$9F`.
+- **`ans` sin resultado previo devolvía `0`**: `g_ans_valid` dependía de la
+  limpieza del BSS (que el XMODEM pisa con padding); ahora se inicializa
+  explícitamente a 0.
+
+### Eliminado
+- **Dead code del wrapper MSBasic**: `_fp_test_direct`, `debug_hex`,
+  `print_nibble`, `debug_newline` e imports sin uso.
+
+### Versión
+- Actualizada a v1.0.3
+
+## [1.0.2] - 2026-08-13
+
+### Agregado
+- Negación anidada y unario `+` en el parser (`--5`, `2++3`, `---5`).
+- Comando `quit`/`exit` que vuelve al monitor sin reiniciarlo.
+- Suite de pruebas automatizada contra hardware real (XMODEM).
+
+### Versión
+- Actualizada a v1.0.2
+
+## [1.0.1] - 2026-07-17
+
+### Corregido
+- `fp_pow` cargaba el mismo operando en ARG y FAC (`2^8` = e^8).
+- `FPWRT` heredaba el flag Z incorrecto (`2^8` = e^8).
+
+### Versión
+- Actualizada a v1.0.1
+
+## [1.0.0] - 2026-07-04
+
+### Agregado
+- Calculadora científica con punto flotante MSBasic (5 bytes).
+- Parser de expresiones recursivo (+, -, *, /, ^, paréntesis, funciones).
+- Interfaz de terminal UART (sin TM1638).
+
+---
+
+## Histórico: Calculadora TM1638 (anterior)
 
 ## [1.4.1] - 2026-01-19
 

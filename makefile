@@ -44,7 +44,7 @@ PROGRAM_NAME = calc-sci
 # Versión (se pasa al código C)
 VERSION_MAJOR = 1
 VERSION_MINOR = 0
-VERSION_PATCH = 2
+VERSION_PATCH = 3
 
 # Archivos de salida
 PROGRAM = $(OUTPUT_DIR)\$(PROGRAM_NAME).bin

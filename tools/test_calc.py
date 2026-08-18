@@ -17,35 +17,47 @@ BIN_FILE = "output/calc-sci.bin"
 # Clase para manejar la conexion con timeout y lectura de datos
 # ============================================================================
 class UartBridge:
-    def __init__(self, host, port, timeout=0.5):
+    def __init__(self, host, port, timeout=0.5, connect_timeout=5.0):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # El connect usa un timeout amplio con reintentos: el bridge puede
+        # tardar en aceptar si esta procesando la sesion anterior.
+        self.sock.settimeout(connect_timeout)
+        last_err = None
+        for _ in range(3):
+            try:
+                self.sock.connect((host, port))
+                break
+            except (socket.timeout, ConnectionError) as e:
+                last_err = e
+                time.sleep(2.0)
+        else:
+            raise last_err
+        # Las lecturas usan el timeout corto para no bloquear los bucles
         self.sock.settimeout(timeout)
-        self.sock.connect((host, port))
         self.buf = b""
 
     def send(self, data):
         self.sock.sendall(data)
 
-    def send_text(self, text, char_delay=0.05):
-        """Envia texto char por char esperando el eco del monitor 6502.
-        Esto garantiza que cada caracter llego antes de enviar el siguiente."""
+    def send_text(self, text, char_delay=0.05, echo_timeout=1.0):
+        """Envia texto char por char esperando el eco del receptor (monitor
+        o calculadora). Garantiza que cada caracter llego antes de enviar el
+        siguiente y evita perdida de caracteres. Si el receptor no hace eco
+        (p.ej. modo XMODEM o launcher), continua tras echo_timeout."""
         for ch in text:
             self.sock.sendall(ch.encode())
-            # Esperar el eco del caracter (el monitor/calculadora lo reenvia)
-            end = time.time() + 2.0
+            end = time.time() + echo_timeout
             echoed = False
             while time.time() < end:
                 try:
                     data = self.sock.recv(1024)
                     if data:
-                        # Ver si el ultimo byte recibido es el caracter enviado
                         if ch.encode() in data or (data and data[-1:] == ch.encode()):
                             echoed = True
                             break
                 except socket.timeout:
                     pass
             if not echoed:
-                # El monitor no eco este caracter, enviar igual (quizas es funcion)
                 time.sleep(char_delay)
             else:
                 time.sleep(0.01)  # pequeña pausa para procesamiento
@@ -114,16 +126,20 @@ def xmodem_send(bridge, filepath):
     total_blocks = len(data) // 128
     print(f"  Archivo: {len(data)} bytes, {total_blocks} bloques")
 
-    # Esperar 'C' (CRC) o NAK (checksum) del receptor
-    print("  Esperando 'C'/NAK del monitor...")
-    response = bridge.read_until(b"C", timeout=5.0)
+    # Esperar el primer NAK (checksum) o 'C' (CRC) del receptor.
+    # El monitor usa checksum (NAK), pero se acepta 'C' por compatibilidad.
+    end = time.time() + 5.0
+    response = b""
     use_crc = False
-    if response and b"C" in response:
-        use_crc = True
-        print("  Modo CRC (el monitor envio 'C')")
-    else:
-        bridge.read_until(b"\x15", timeout=2.0)
-        print("  Modo Checksum (el monitor envio NAK)")
+    while time.time() < end:
+        response += bridge.read_available(0.3)
+        if b"\x15" in response:
+            print("  Modo Checksum (el monitor envio NAK)")
+            break
+        if b"C" in response:
+            use_crc = True
+            print("  Modo CRC (el monitor envio 'C')")
+            break
 
     block_num = 1
     for i in range(total_blocks):
@@ -161,6 +177,9 @@ def xmodem_send(bridge, filepath):
 # Paquete de pruebas
 # ============================================================================
 TESTS = [
+    # ans: sin resultado anterior debe dar error
+    ("ans", "No previous result", None),
+
     # Operaciones basicas
     ("2+2",              "4",             None),
     ("10-3",             "7",            None),
@@ -295,6 +314,17 @@ TESTS = [
     ("-2^2",             "4",            None),
     ("(-2)^2",           "4",            0.000001),
     ("(-2)^3",           "-8",           0.001),
+
+    # ans: reutilizacion del resultado anterior
+    ("7*3",              "21",           None),          # ans = 21
+    ("ans",              "21",           None),          # ans no cambia
+    ("ans+1",            "22",           None),          # ans = 22
+    ("ans*2",            "44",           None),          # ans = 44
+    ("ans/4",            "11",           None),          # ans = 11
+    ("ans^2",            "121",          None),          # ans = 121
+    ("sqr(ans)",         "11",           0.000001),      # ans = 11
+    ("1/0",              "Division by zero", None),      # error: ans NO cambia
+    ("ans+1",            "12",           None),          # ans sigue 11
 ]
 
 # ============================================================================
@@ -334,37 +364,79 @@ def main():
     bridge.read_available(0.3)
     print("Conectado OK")
 
-    # 0. Si la calculadora esta corriendo, enviar 'quit' para volver al monitor
-    print("=== Enviando quit (por si la calculadora esta activa) ===")
-    bridge.send_text("quit")
-    time.sleep(1.0)
-    resp = bridge.read_available(1.0)
-    print(f"  Respuesta: {resp[:80]!r}")
-    if b"Volviendo" in resp:
-        print("  Calculadora terminada, de vuelta al monitor")
-        # Esperar el banner completo del monitor y su prompt '>'
-        end = time.time() + 5.0
-        banner = b""
-        while time.time() < end:
-            chunk = bridge.read_available(0.5)
-            banner += chunk
-            if b">" in banner:
-                break
-        print(f"  Banner monitor: {banner[:100]!r}")
-        time.sleep(0.5)
-        bridge.read_available(0.5)  # limpiar resto
-    else:
-        print("  (No habia calculadora corriendo o ya estaba en el monitor)")
-        # Ya estamos en el monitor, limpiar buffer
-        bridge.read_available(0.5)
+    # =====================================================================
+    # SINCRONIZACION: llegar al prompt del monitor.
+    # El monitor v2.6.2 tiene 4 estados posibles:
+    #   - Calculadora corriendo : 'quit' la termina ("Volviendo al monitor...")
+    #   - Prompt del monitor    : 'quit' provoca RESET -> el monitor auto-
+    #                             carga LAUNCH.BIN (APP LAUNCHER). 'Q' lo cierra
+    #   - APP LAUNCHER          : pantalla estatica; 'Q' vuelve al monitor
+    #   - Modo XMODEM atascado  : CAN CAN (0x18) lo aborta ("Error XMODEM")
+    # =====================================================================
 
-    # 1. Cargar por XMODEM
+    # 0. CAN CAN: abortar sesion XMODEM atascada de un intento previo
+    def at_prompt(data):
+        tail = data.rstrip()
+        return tail.endswith(b">") and (b"H=ayuda" in data or b"Retorno de" in data)
+
+    # Sincronizacion con reintentos: el hardware puede quedar en un estado
+    # raro de sesiones previas (XMODEM atascado, calculadora, launcher...).
+    prompt_ok = False
+    for attempt in range(3):
+        bridge.send(b"\x18\x18")  # CAN CAN
+        time.sleep(0.5)
+        bridge.read_available(0.8)
+
+        print("=== Enviando quit (por si la calculadora esta activa) ===")
+        bridge.send_text("quit")
+        time.sleep(1.2)
+        resp = bridge.read_available(3.0)
+        print(f"  Tras quit: {resp[:110]!r}")
+
+        if b"LAUNCH" in resp or not resp:
+            print("  APP LAUNCHER detectado; saliendo con Q...")
+            bridge.send(b"Q")
+            time.sleep(1.0)
+            resp = bridge.read_available(3.0)
+            print(f"  Tras Q: {resp[:110]!r}")
+
+        end = time.time() + 6.0
+        while time.time() < end:
+            resp += bridge.read_available(0.4)
+            if at_prompt(resp):
+                break
+        if at_prompt(resp):
+            prompt_ok = True
+            break
+    if not prompt_ok:
+        print("  ERROR: no se pudo llegar al prompt del monitor")
+        bridge.close()
+        sys.exit(1)
+    bridge.read_available(0.5)  # limpiar resto
+
+    # 5. Pedir modo XMODEM
     print("=== XMODEM: enviando XRECV 0800 ===")
     bridge.send_text("XRECV 0800")
-    time.sleep(0.5)
-    resp = bridge.read_available(0.5)
-    print(f"  Monitor: {resp[:80]!r}")
-    if b"Listo para XMODEM" not in resp:
+
+    # Esperar confirmacion del modo XMODEM. El banner varia segun la version
+    # del monitor: v2.2.0+ dice 'Listo para XMODEM', v2.6.2 usa 'CARGANDO Y
+    # EJECUTANDO' + 'Inicie transferencia...' seguido de NAKs.
+    def xmodem_ready(data):
+        return (b"Listo para XMODEM" in data or
+                b"Inicie transferencia" in data or
+                b"XMODEM" in data or
+                b"CARGANDO" in data or
+                b"\x15" in data)
+
+    print("  Esperando confirmacion XMODEM...")
+    end = time.time() + 6.0
+    resp = b""
+    while time.time() < end:
+        resp += bridge.read_available(0.3)
+        if xmodem_ready(resp):
+            break
+    print(f"  Monitor: {resp[:100]!r}")
+    if not xmodem_ready(resp):
         print("  ERROR: El monitor no entro en modo XMODEM")
         bridge.close()
         sys.exit(1)
@@ -382,38 +454,88 @@ def main():
     # 2. Ejecutar
     print("=== Ejecutando R 0800 ===")
     bridge.send_text("R 0800")
-    time.sleep(1.0)
-    resp = bridge.read_available(1.0)
-    print(f"  Banner: {resp[:120]!r}")
-    if b"Calculadora" not in resp:
+    # Esperar el banner COMPLETO de la calculadora y su prompt '> '.
+    # Si el primer test se envia antes, los caracteres se pierden durante
+    # la impresion del banner (la linea llega vacia y da '= 0').
+    banner = b""
+    end = time.time() + 8.0
+    while time.time() < end:
+        chunk = bridge.read_available(0.3)
+        banner += chunk
+        if b"Calculadora" in banner and b"> " in banner:
+            break
+    print(f"  Banner (final): {banner[-90:]!r}")
+    if b"Calculadora" not in banner:
         print("ADVERTENCIA: No se vio el banner de la calculadora")
+    time.sleep(0.3)
+    bridge.read_available(0.3)  # limpiar resto
+
+    # Ping de sincronizacion: enviar una linea vacia y esperar que la
+    # calculadora reimprima el prompt '> '. Confirma que esta lista en el
+    # bucle antes del primer test (el primer envio tras el banner es fragil).
+    bridge.send(b"\r")
+    end = time.time() + 3.0
+    while time.time() < end:
+        chunk = bridge.read_available(0.3)
+        if b"> " in chunk:
+            break
+    bridge.read_available(0.3)  # limpiar resto
 
     # 3. Ejecutar pruebas
+    # Tests a ejecutar: si se pasan numeros como argumentos, solo esos
+    # (1-based). Ej: python test_calc.py 1 5 20
+    selected = [int(x) for x in sys.argv[1:]] if len(sys.argv) > 1 else None
+    indices = selected if selected is not None else list(range(1, len(TESTS) + 1))
+
     print("=== Ejecutando pruebas ===")
     passed = 0
     failed = 0
     failures = []
 
-    for expr, expected, tol in TESTS:
+    for idx in indices:
+        expr, expected, tol = TESTS[idx - 1]
         bridge.send_text(expr)
         time.sleep(0.4)
         resp = bridge.read_available(0.4)
-
         result, kind = parse_output(resp.decode(errors="replace"))
+
+        # Retry: el bridge puede perder el PRIMER envio (la linea llega vacia
+        # y la calculadora responde '= 0' sin evaluar), o el CR final.
+        # Se reintenta hasta 2 veces reenviando la expresion completa.
+        def needs_retry():
+            if result is None:
+                return True
+            # Caso 'ans' sin resultado previo: '0' significa linea vacia.
+            if expected == "No previous result" and result == "0":
+                return True
+            return False
+
+        attempts = 0
+        while needs_retry() and attempts < 2:
+            attempts += 1
+            bridge.send(b"\r")           # descartar linea pendiente
+            time.sleep(0.4)
+            bridge.send_text(expr)        # reenviar expresion
+            time.sleep(0.4)
+            resp = bridge.read_available(0.4)
+            result, kind = parse_output(resp.decode(errors="replace"))
+
         if result is None:
-            print(f"  [NO RESP] {expr!r} -> {resp[:50]!r}")
+            print(f"  [NO RESP] {idx:>2}/{len(TESTS)} {expr!r} -> {resp[:50]!r}")
             failed += 1
-            failures.append((expr, expected, "NO RESPONSE"))
+            failures.append((idx, expr, expected, "NO RESPONSE"))
             continue
 
         ok = compare(result, expected, tol)
         status = "OK " if ok else "FAIL"
-        print(f"  [{status}] {expr!r} = {result!r} (esperado {expected!r})")
+        print(f"  [{status}] {idx:>2}/{len(TESTS)} {expr!r} = {result!r} (esperado {expected!r})")
+        if not ok:
+            print(f"         raw: {resp[:200]!r}")
         if ok:
             passed += 1
         else:
             failed += 1
-            failures.append((expr, expected, result))
+            failures.append((idx, expr, expected, result))
 
     # 4. Salir
     print("=== Enviando quit ===")
@@ -427,12 +549,12 @@ def main():
     # 5. Resumen
     print()
     print("=" * 50)
-    print(f"RESULTADO: {passed} OK, {failed} FAIL de {len(TESTS)} pruebas")
+    print(f"RESULTADO: {passed} OK, {failed} FAIL de {len(indices)} pruebas")
     if failures:
         print()
         print("FALLOS:")
-        for expr, expected, actual in failures:
-            print(f"  {expr}: esperado={expected!r}, obtenido={actual!r}")
+        for idx, expr, expected, actual in failures:
+            print(f"  {idx}. {expr}: esperado={expected!r}, obtenido={actual!r}")
     print("=" * 50)
     return 0 if failed == 0 else 1
 

@@ -45,4 +45,12 @@ uint8_t parse_expression(const char *input, msbasic_float_t *result);
  */
 const char* parser_get_error(void);
 
+/**
+ * Establece el ultimo resultado exitoso, disponible para la palabra clave
+ * 'ans' en la siguiente expresion. No llamar tras un error.
+ *
+ * @param value Resultado a recordar
+ */
+void parser_set_ans(const msbasic_float_t *value);
+
 #endif /* PARSER_H */

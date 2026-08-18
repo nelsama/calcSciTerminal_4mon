@@ -23,13 +23,16 @@ El script hace todo automáticamente:
 
 ```
 1. Conecta al bridge (TCP raw)
-2. Envía 'quit' (por si la calculadora sigue activa)
-3. Espera el prompt del monitor
-4. Envía 'XRECV 0800' → el monitor entra en modo XMODEM
-5. Transfiere output/calc-sci.bin por XMODEM (checksum)
-6. Envía 'R 0800' → ejecuta la calculadora
-7. Envía 42 expresiones de prueba y valida resultados
-8. Envía 'quit' → vuelve al monitor
+2. Envía CAN (0x18) para cancelar un XMODEM atascado de un intento previo
+3. Envía 'quit' (por si la calculadora sigue activa)
+4. Si el monitor entró al APP LAUNCHER (auto-carga LAUNCH.BIN tras el
+   reset que provoca 'quit' en el prompt del monitor), envía 'Q' para salir
+5. Espera el prompt del monitor
+6. Envía 'XRECV 0800' → el monitor entra en modo XMODEM
+7. Transfiere output/calc-sci.bin por XMODEM (checksum)
+8. Envía 'R 0800' → ejecuta la calculadora
+9. Envía 95 expresiones numeradas (1/95 ... 95/95) y valida resultados
+10. Envía 'quit' → vuelve al monitor
 ```
 
 ## Configuración
@@ -85,7 +88,7 @@ de una vez. El script usa **eco-sync**: envía un carácter y espera a que el
 monitor lo haga eco antes de enviar el siguiente. Esto garantiza que cada
 carácter llega.
 
-## Pruebas Incluidas (95)
+## Pruebas Incluidas (105)
 
 ### Operaciones básicas
 ```
@@ -221,6 +224,20 @@ abs(-3.5)      = 3.5
 > **Bug corregido**: `--5` daba `Syntax error`. El parser ahora usa
 > recursión en `parse_unary` para negaciones anidadas y soporta unario `+`.
 
+#### ans: reutilización del resultado anterior (v1.0.3)
+```
+ans            = ERR: No previous result   (sin resultado anterior)
+7*3            = 21                         (ans = 21)
+ans            = 21                         (ans no cambia)
+ans+1          = 22
+ans*2          = 44
+ans/4          = 11
+ans^2          = 121
+sqr(ans)       = 11                         (funciona dentro de funciones)
+1/0            = ERR: Division by zero      (error: ans NO cambia)
+ans+1          = 12                         (ans sigue siendo 11)
+```
+
 #### Decimales extremos
 ```
 .5             = 0.5
@@ -275,8 +292,21 @@ Esto es normal y coincide con el comportamiento del MS BASIC original
 
 ## Resultado de la última ejecución
 
+Ejecutado el **2026-08-17** contra el Monitor 6502 v2.6.2, con CC65 V2.19
+(snapshot), el fix de conversión float→string y la palabra clave `ans`
+(v1.0.3) aplicados:
+
 ```
-RESULTADO: 95 OK, 0 FAIL de 95 pruebas
+RESULTADO: 105 OK, 0 FAIL de 105 pruebas
+```
+
+Salida con numeración consecutiva por prueba:
+
+```
+[OK ]  1/95 '2+2' = '4' (esperado '4')
+[OK ]  2/95 '10-3' = '7' (esperado '7')
+...
+[OK ] 95/95 '(-2)^3' = '-8' (esperado '-8')
 ```
 
 ## Bugs encontrados por las pruebas
@@ -285,9 +315,10 @@ RESULTADO: 95 OK, 0 FAIL de 95 pruebas
 |-----|---------|-----|---------|
 | fp_pow usaba `a_ptr_zp` para ambos operandos | `2^8` = e^8 = 2980.95 | Copiar `b_ptr_zp` a `a_ptr_zp` antes de cargar FAC | 1.0.0 |
 | FPWRT heredaba Z flag incorrecto | `2^8` = e^8 = 2980.95 | `lda FAC` antes de `jsr FPWRT` | 1.0.1 |
-| Conversor string usaba 24 bits de mantisa | `850*40000` = ERR | 32 bits (bytes 1-4) y límite exp ≤ $A0 | 1.0.1 |
+| Conversor string usaba 24 bits de mantisa | `850*40000` = ERR | Mantisa completa de 32 bits (bytes 1-4) y límite exp ≤ $9F | 1.0.3 |
 | Negación anidada no soportada | `--5` = Syntax error | Recursión en `parse_unary` + unario `+` | 1.0.2 |
 | `quit` reiniciaba el monitor | Banner "Tang Nano 9K..." al salir | No tocar el SP hardware (RTS simple al monitor) | 1.0.3 |
+| Sin soporte para reutilizar resultados | `3*ans` = Unknown function | Palabra clave `ans` + `parser_set_ans()` (no cambia ante errores) | 1.0.3 |
 
 ## Comportamiento de quit/exit
 
@@ -309,6 +340,11 @@ Para lograrlo, `startup.s`:
 - Hace `cli` al salir (re-habilita IRQ del monitor)
 - Finaliza con `RTS` simple en lugar de `jmp $8000`
 
+> **Nota (Monitor v2.6.2)**: escribir `quit` en el **prompt del monitor** (no en
+> la calculadora) provoca un RESET; el monitor auto-carga `LAUNCH.BIN` desde la
+> SD y entra al **APP LAUNCHER** (lista de programas). Para volver al monitor:
+> presionar `Q`. El script de pruebas detecta y maneja este caso automáticamente.
+
 ## Solución de problemas
 
 | Problema | Causa | Solución |
@@ -316,7 +352,8 @@ Para lograrlo, `startup.s`:
 | `ERR: Syntax error` al enviar XRECV | La calculadora sigue corriendo | El script envía `quit` automáticamente |
 | Caracteres perdidos (`2+34`) | Envío demasiado rápido | El script usa eco-sync (char por char) |
 | `No ACK para bloque N` en XMODEM | Modo CRC vs checksum | El script detecta NAK y usa checksum |
-| Timeout al conectar | Puerto equivocado | Verificar con el script de escaneo de puertos |
+| XRECV sin respuesta | El monitor está en el APP LAUNCHER (tras reset) | El script envía CAN y `Q` automáticamente |
+| Timeout al conectar | Puerto equivocado o bridge ocupado | El script reintenta el connect; verificar con el escáner de puertos |
 
 ## Archivos
 

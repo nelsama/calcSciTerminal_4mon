@@ -191,7 +191,7 @@ int main(void) {
     uart_print("  Usando rutinas MSBasic Float\r\n");
     uart_print("  Expresiones: + - * / ^ ( )\r\n");
     uart_print("  Funciones: sin cos tan atan log exp sqrt sqr abs\r\n");
-    uart_print("            d2r r2d pi\r\n");
+    uart_print("            d2r r2d  Constantes: pi, ans\r\n");
     uart_print("  Comandos: quit, exit, help\r\n");
     uart_print("================================================\r\n");
     uart_newline();
@@ -233,7 +233,7 @@ int main(void) {
             uart_print("  ===============================\r\n");
             uart_print("  Operadores: +  -  *  /  ^\r\n");
             uart_print("  Agrupacion: (  )\r\n");
-            uart_print("  Constante:  pi\r\n");
+            uart_print("  Constantes: pi, ans (ultimo resultado)\r\n");
             uart_print("  Funciones:\r\n");
             uart_print("    sin(x)   cos(x)   tan(x)    - Trig (radianes)\r\n");
             uart_print("    atan(x)                       - Arco tangente\r\n");
@@ -251,8 +251,10 @@ int main(void) {
             continue;
         }
 
-        /* Evaluar la expresión */
+        /* Evaluar la expresion */
         if (parse_expression(input_buffer, &result) == 0) {
+            /* Recordar el resultado para la palabra clave 'ans' */
+            parser_set_ans(&result);
             fp_float_to_string(&result, output_buffer, OUTPUT_BUF_SIZE);
             uart_print("= ");
             uart_print(output_buffer);

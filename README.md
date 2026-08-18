@@ -9,7 +9,7 @@ Calculadora de punto flotante con funciones trigonométricas, logaritmos, expone
 - ✅ **Funciones trigonométricas**: `sin()`, `cos()`, `tan()`, `atan()` (radianes)
 - ✅ **Logaritmo natural** `log()` y **exponencial** `exp()`
 - ✅ **Raíz cuadrada** `sqrt()`/`sqr()` y **valor absoluto** `abs()`
-- ✅ **Constante** `pi`
+- ✅ **Constante** `pi` y **resultado anterior** `ans` (reutilizable: `3*ans`)
 - ✅ **Conversión grados/radianes**: `d2r()`, `r2d()`
 - ✅ **Precisión**: ~6-7 dígitos significativos (formato MSBasic 5 bytes)
 - ✅ **Usa rutinas de punto flotante de MSBasic**
@@ -33,6 +33,15 @@ Calculadora de punto flotante con funciones trigonométricas, logaritmos, expone
 
 > log(exp(5))
 = 5
+
+> 2+3
+= 5
+
+> ans*3
+= 15
+
+> ans^2
+= 225
 
 > sin(0.5)^2+cos(0.5)^2
 = 1
@@ -77,7 +86,7 @@ CalculadoraPuntoFlotante-Terminal/
 
 ## Hardware Requerido
 
-- **Tang Nano 9K** con Monitor 6502 v2.2.0+
+- **Tang Nano 9K** con Monitor 6502 v2.6.2
 - **Conexión UART** (USB-TTL o similar) para la terminal
 
 No requiere módulos adicionales — toda la interacción es por terminal.
@@ -85,7 +94,7 @@ No requiere módulos adicionales — toda la interacción es por terminal.
 ## Software Requerido
 
 - **CC65** instalado en `D:\cc65` (o ajustar ruta en makefile)
-- **Monitor 6502 v2.2.0+** con ROM API
+- **Monitor 6502 v2.6.2** con ROM API
 - **Terminal serie** (PuTTY, screen, minicom, etc.) a 115200 baud
 
 ## Compilación
@@ -98,7 +107,7 @@ make
 make clean
 ```
 
-El binario se genera en `output/calc-sci.bin` (~10.5KB)
+El binario se genera en `output/calc-sci.bin` (~11.4KB)
 
 ## Instalación y Uso
 
@@ -145,6 +154,10 @@ R 0800
 | Constante | Valor |
 |-----------|-------|
 | `pi` | 3.1415926535... |
+| `ans` | Último resultado exitoso (error `No previous result` si aún no hay ninguno) |
+
+> `ans` no cambia ante un error: si `1/0` falla, `ans` conserva el último
+> resultado válido.
 
 ### Comandos
 | Comando | Acción |
@@ -174,7 +187,7 @@ La carpeta `libs/msbasic-float/` es una librería independiente que puede usarse
 | Componente | Tamaño |
 |------------|--------|
 | Librería matemática | ~5.5 KB |
-| Calculadora completa | ~10.9 KB |
+| Calculadora completa | ~11.4 KB |
 | RAM disponible | ~13.8 KB |
 | Espacio libre | ~2.9 KB |
 
@@ -187,9 +200,9 @@ Este proyecto empezó como una calculadora con display TM1638. La versión actua
 | Interfaz | Display 8 dígitos + 16 teclas | Terminal texto |
 | Expresiones | Solo 2 operandos | Completas con paréntesis |
 | Funciones | Solo +,-,×,/ | Trig, log, exp, sqr, etc. |
-| Constantes | No | pi |
+| Constantes | No | pi, ans |
 | Conversión | No | d2r, r2d |
-| Tamaño | ~12.8 KB | ~10.9 KB |
+| Tamaño | ~12.8 KB | ~11.4 KB |
 
 ## 💖 Apóyame
 
