@@ -154,10 +154,37 @@ R 0800
 | Constante | Valor |
 |-----------|-------|
 | `pi` | 3.1415926535... |
-| `ans` | Último resultado exitoso (error `No previous result` si aún no hay ninguno) |
+| `ans` | Último resultado exitoso |
 
-> `ans` no cambia ante un error: si `1/0` falla, `ans` conserva el último
-> resultado válido.
+### Reutilizar el resultado anterior (`ans`)
+
+`ans` guarda el último resultado **exitoso** y se puede usar en cualquier
+expresión igual que una constante: `3*ans`, `ans^2`, `sin(ans)`, `ans+1`...
+
+```
+> 2+3
+= 5          ← ans = 5
+
+> ans*3
+= 15         ← 5 × 3
+
+> ans^2
+= 225        ← 15²
+
+> ans/15
+= 15
+
+> sin(ans)
+= 0.650287   ← funciona dentro de funciones
+```
+
+Comportamiento:
+- Se actualiza con cada resultado **exitoso**.
+- Un error **no** lo modifica: si `1/0` falla, `ans` conserva el último valor
+  válido.
+- Si aún no hay ningún resultado (recién iniciada la calculadora), `ans`
+  devuelve `ERR: No previous result`.
+- Evaluar `ans` a secas también actualiza `ans` (a sí mismo), sin efecto.
 
 ### Comandos
 | Comando | Acción |
