@@ -12,7 +12,6 @@
 
 ; Importar funciones de CC65 PRIMERO
 .import popax
-.import _debug_print_fac  ; Para debug
 
 ; Usar direcciones Zero Page FIJAS que NO use la ROM
 ; La ROM usa $F0-$FF, así que usamos $02-$09 que están libres
@@ -42,110 +41,6 @@ temp_operand: .res 5    ; Almacenamiento temporal para operando
 ; Crear alias para exportar FAC y ARG
 _FAC = FAC
 _ARG = ARG
-
-.segment "CODE"
-
-; Debug: imprimir un byte hex via UART ROM
-; Entrada: A = byte a imprimir
-UART_PUTC = $BF18
-
-debug_hex:
-        pha
-        lsr
-        lsr
-        lsr
-        lsr
-        jsr     print_nibble
-        pla
-        and     #$0F
-        jsr     print_nibble
-        lda     #' '
-        jsr     UART_PUTC
-        rts
-
-print_nibble:
-        cmp     #10
-        bcc     @digit
-        adc     #6              ; A-F
-@digit:
-        adc     #'0'
-        jmp     UART_PUTC
-
-debug_newline:
-        lda     #13
-        jsr     UART_PUTC
-        lda     #10
-        jmp     UART_PUTC
-
-; ==============================================================================
-; TEST DIRECTO - Sin punteros, valores hardcodeados
-; void fp_test_direct(void) - Prueba 2+2=4 directamente
-; ==============================================================================
-.export _fp_test_direct
-_fp_test_direct:
-        ; Limpiar FAC completamente
-        lda     #0
-        sta     FAC
-        sta     FAC+1
-        sta     FAC+2
-        sta     FAC+3
-        sta     FAC+4
-        sta     FACSIGN
-        sta     FACEXTENSION
-        sta     ARGSIGN
-        sta     ARGEXTENSION
-
-        ; Cargar valor 2 en FAC con formato CORRECTO (bit 7 explícito)
-        ; Valor 2 = exp 0x82, mantisa 0x80 (bit implícito ahora explícito)
-        lda     #$82
-        sta     FAC
-        lda     #$80            ; ¡BIT 7 ACTIVO!
-        sta     FAC+1
-        lda     #$00
-        sta     FAC+2
-        sta     FAC+3
-        sta     FAC+4
-
-        ; Cargar valor 2 en test_val2 (formato almacenamiento SIN bit explícito)
-        ; FADD espera el segundo operando en formato almacenamiento
-        lda     #$82
-        sta     test_val2
-        lda     #$00            ; Sin bit explícito para memoria
-        sta     test_val2+1
-        sta     test_val2+2
-        sta     test_val2+3
-        sta     test_val2+4
-
-        ; Debug: Mostrar FAC antes de FADD
-        lda     #'A'
-        jsr     UART_PUTC
-        lda     FAC
-        jsr     debug_hex
-        lda     FAC+1
-        jsr     debug_hex
-        jsr     debug_newline
-
-        ; Llamar FADD: FAC = FAC + test_val2 (2+2=4)
-        lda     #<test_val2
-        ldy     #>test_val2
-        jsr     FADD
-
-        ; Debug: Mostrar FAC después de FADD
-        lda     #'R'
-        jsr     UART_PUTC
-        lda     FAC
-        jsr     debug_hex
-        lda     FAC+1
-        jsr     debug_hex
-        lda     FAC+2
-        jsr     debug_hex
-        jsr     debug_newline
-
-        rts
-
-; Valor temporal para test
-.segment "BSS"
-test_val2: .res 5
 
 .segment "CODE"
 

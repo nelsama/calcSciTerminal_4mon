@@ -28,7 +28,7 @@
  * Rango aproximado: ±1.7E+38
  * Precisión: ~6-7 dígitos decimales
  * 
- * Ver docs/MSBASIC_FLOAT_API.md para documentación completa.
+ * Ver libs/msbasic-float/README.md y ARCHITECTURE.md para más detalles.
  * ============================================================================
  */
 
@@ -180,16 +180,6 @@ void fp_save_fac(msbasic_float_t *dest);
  * Pone el acumulador FAC en cero
  */
 void fp_clear_fac(void);
-
-/* ============================================================================
- * TEST (solo para debug)
- * ============================================================================ */
-
-/**
- * Test directo de suma 2+2=4 sin usar punteros
- * Útil para verificar que las rutinas MSBasic funcionan
- */
-void fp_test_direct(void);
 
 /* ============================================================================
  * FUNCIONES TRIGONOMÉTRICAS (radianes)

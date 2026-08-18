@@ -131,8 +131,11 @@ void fp_float_to_string(const msbasic_float_t *value, char *buffer, uint8_t max_
     
     exp = temp.bytes[0];
     
-    /* Overflow check */
-    if (exp > 0x98) {
+    /* Overflow check: la parte entera se extrae como int32 (max 2^31-1).
+     * El formato MSBasic normaliza a [0.5, 1) x 2^(exp-0x80), asi que
+     * exp <= 0x9F cubre valores enteros hasta 2147483647. Valores mayores
+     * (p.ej. el resultado de una multiplicacion con 9+ digitos) no caben. */
+    if (exp > 0x9F) {
         buffer[0] = 'E';
         buffer[1] = 'R';
         buffer[2] = 'R';
@@ -140,16 +143,20 @@ void fp_float_to_string(const msbasic_float_t *value, char *buffer, uint8_t max_
         return;
     }
     
-    /* Extraer parte entera */
+    /* Extraer parte entera usando la mantisa completa de 32 bits
+     * (bytes 1-4 con bit 31 implicito): valor = mantisa >> (32 - i).
+     * Con solo 24 bits (bytes 1-3) los valores con exp > 0x98
+     * (>= 2^24 = 16777216, p.ej. 850*40000 = 34000000) daban ERR. */
     if (exp < 0x81) {
         parte_entera = 0;
     } else {
-        mantisa = 0x00800000UL;
-        mantisa |= ((uint32_t)(temp.bytes[1] & 0x7F) << 16);
-        mantisa |= ((uint32_t)temp.bytes[2] << 8);
-        mantisa |= (uint32_t)temp.bytes[3];
+        mantisa = 0x80000000UL;
+        mantisa |= ((uint32_t)(temp.bytes[1] & 0x7F) << 24);
+        mantisa |= ((uint32_t)temp.bytes[2] << 16);
+        mantisa |= ((uint32_t)temp.bytes[3] << 8);
+        mantisa |= (uint32_t)temp.bytes[4];
         i = exp - 0x80;
-        parte_entera = (int32_t)(mantisa >> (24 - i));
+        parte_entera = (int32_t)(mantisa >> (32 - i));
     }
     
     /* Convertir parte entera a string (en reversa) */
